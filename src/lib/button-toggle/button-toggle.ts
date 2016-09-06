@@ -12,7 +12,8 @@ import {
     Output,
     QueryList,
     ViewEncapsulation,
-    forwardRef
+    forwardRef,
+    AfterViewInit
 } from '@angular/core';
 import {
     NG_VALUE_ACCESSOR,
@@ -20,10 +21,7 @@ import {
     FormsModule,
 } from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
-import {
-    MdUniqueSelectionDispatcher
-} from '@angular2-material/core/coordination/unique-selection-dispatcher';
-import {BooleanFieldValue} from '@angular2-material/core/annotations/field-value';
+import {BooleanFieldValue, MdUniqueSelectionDispatcher} from '@angular2-material/core';
 
 export type ToggleType = 'checkbox' | 'radio';
 
@@ -55,7 +53,7 @@ export class MdButtonToggleChange {
     'role': 'radiogroup',
   },
 })
-export class MdButtonToggleGroup implements ControlValueAccessor {
+export class MdButtonToggleGroup implements AfterViewInit, ControlValueAccessor {
   /** The value for the button toggle group. Should match currently selected button toggle. */
   private _value: any = null;
 
@@ -67,6 +65,9 @@ export class MdButtonToggleGroup implements ControlValueAccessor {
 
   /** The currently selected button toggle, should match the value. */
   private _selected: MdButtonToggle = null;
+
+  /** Whether the button toggle group is initialized or not. */
+  private _isInitialized: boolean = false;
 
   /** The method to be called in order to update ngModel. */
   private _controlValueAccessorChangeFn: (value: any) => void = (value) => {};
@@ -83,6 +84,11 @@ export class MdButtonToggleGroup implements ControlValueAccessor {
   /** Child button toggle buttons. */
   @ContentChildren(forwardRef(() => MdButtonToggle))
   _buttonToggles: QueryList<MdButtonToggle> = null;
+
+  /** TODO: internal */
+  ngAfterViewInit() {
+    this._isInitialized = true;
+  }
 
   @Input()
   get name(): string {
@@ -114,7 +120,12 @@ export class MdButtonToggleGroup implements ControlValueAccessor {
       this._value = newValue;
 
       this._updateSelectedButtonToggleFromValue();
-      this._emitChangeEvent();
+
+      // Only emit a change event if the view is completely initialized.
+      // We don't want to emit a change event for the initial values.
+      if (this._isInitialized) {
+        this._emitChangeEvent();
+      }
     }
   }
 

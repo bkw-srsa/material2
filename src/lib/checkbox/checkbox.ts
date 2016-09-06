@@ -9,6 +9,7 @@ import {
     ViewEncapsulation,
     forwardRef,
     NgModule,
+    ModuleWithProviders,
 } from '@angular/core';
 import {NG_VALUE_ACCESSOR, ControlValueAccessor} from '@angular/forms';
 
@@ -30,7 +31,7 @@ export const MD_CHECKBOX_CONTROL_VALUE_ACCESSOR: any = {
 /**
  * Represents the different states that require custom transitions between them.
  */
-enum TransitionCheckState {
+export enum TransitionCheckState {
   /** The initial state of the component before any user interaction. */
   Init,
   /** The state representing the component when it's becoming checked. */
@@ -309,4 +310,11 @@ export class MdCheckbox implements ControlValueAccessor {
   exports: [MdCheckbox],
   declarations: [MdCheckbox],
 })
-export class MdCheckboxModule { }
+export class MdCheckboxModule {
+  static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: MdCheckboxModule,
+      providers: []
+    };
+  }
+}

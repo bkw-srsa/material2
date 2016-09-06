@@ -15,6 +15,7 @@ import {
   EventEmitter,
   Output,
   NgModule,
+  ModuleWithProviders,
 } from '@angular/core';
 import {
   NG_VALUE_ACCESSOR,
@@ -22,8 +23,7 @@ import {
   FormsModule,
 } from '@angular/forms';
 import {CommonModule} from '@angular/common';
-import {BooleanFieldValue} from '@angular2-material/core/annotations/field-value';
-import {MdError} from '@angular2-material/core/errors/error';
+import {BooleanFieldValue, MdError} from '@angular2-material/core';
 import {Observable} from 'rxjs/Observable';
 
 
@@ -313,4 +313,11 @@ export class MdInput implements ControlValueAccessor, AfterContentInit, OnChange
   imports: [CommonModule, FormsModule],
   exports: [MdPlaceholder, MdInput, MdHint],
 })
-export class MdInputModule { }
+export class MdInputModule {
+  static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: MdInputModule,
+      providers: []
+    };
+  }
+}
