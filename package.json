@@ -11,6 +11,7 @@
     "registry": "https://nexus.vc-nord.de/nexus/repository/npm-bkw/"
   },
   "scripts": {
+    "release": "gulp build:release && ./deployToNexus.sh",
     "build": "gulp build",
     "demo-app": "gulp serve:devapp",
     "test": "gulp test",
@@ -20,7 +21,7 @@
     "deploy": "firebase deploy",
     "webdriver-manager": "webdriver-manager"
   },
-  "version": "2.0.0-alpha.8",
+  "version": "2.0.0-alpha.8-bkw-2",
   "license": "MIT",
   "engines": {
     "node": ">= 4.2.1 < 5"
