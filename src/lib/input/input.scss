@@ -38,7 +38,7 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
   width: 100% / $md-input-floating-placeholder-scale-factor;
 
   .md-placeholder-required {
-    color: $md-input-required-placeholder-color;
+
   }
 }
 
@@ -106,7 +106,7 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
     top: 0;
 
     font-size: 100%;
-    pointer-events: none;  // We shouldn't catch mouse events (let them through).
+    pointer-events: none; // We shouldn't catch mouse events (let them through).
     color: $md-input-placeholder-color;
     z-index: 1;
 
@@ -120,9 +120,9 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
     transform: translateY(0);
     transform-origin: bottom left;
     transition: transform $swift-ease-out-duration $swift-ease-out-timing-function,
-                scale $swift-ease-out-duration $swift-ease-out-timing-function,
-                color $swift-ease-out-duration $swift-ease-out-timing-function,
-                width $swift-ease-out-duration $swift-ease-out-timing-function;
+    scale $swift-ease-out-duration $swift-ease-out-timing-function,
+    color $swift-ease-out-duration $swift-ease-out-timing-function,
+    width $swift-ease-out-duration $swift-ease-out-timing-function;
 
     &.md-empty {
       display: block;
@@ -185,7 +185,7 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
       opacity: 0;
       transform: scaleY(0);
       transition: transform $swift-ease-out-duration $swift-ease-out-timing-function,
-                  opacity $swift-ease-out-duration $swift-ease-out-timing-function;
+      opacity $swift-ease-out-duration $swift-ease-out-timing-function;
 
       &.md-accent {
         background-color: $md-input-underline-color-accent;
@@ -213,7 +213,6 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
     }
   }
 }
-
 
 // RTL support.
 :host-context([dir='rtl']) {
