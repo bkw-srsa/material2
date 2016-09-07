@@ -45,7 +45,7 @@
              *ngIf="_hasPlaceholder()">
         <ng-content select="md-placeholder"></ng-content>
         {{placeholder}}
-        <span class="md-placeholder-required" *ngIf="required">*</span>
+        <span class="md-placeholder-required" *ngIf="!required">(optional)</span>
       </label>
     </div>
 
