@@ -17,7 +17,7 @@ fi
 echo "new version:    ${NEW_VERSION}"
 
 # updating package.json files
-packages=$(find src/lib -name 'package.json')
+packages=$(find src -name 'package.json')
 for p in ${packages}; do
   sed -i '' "s/${VERSION}/${NEW_VERSION}/g" ${p}
 done
