@@ -10,11 +10,10 @@ import {
     Overlay,
     OverlayState,
     OverlayOrigin,
-    OVERLAY_PROVIDERS,
     ComponentPortal,
     Portal,
     TemplatePortalDirective,
-} from '@angular2-material/core/core';
+} from '@angular2-material/core';
 
 
 @Component({
@@ -22,7 +21,6 @@ import {
   selector: 'overlay-demo',
   templateUrl: 'overlay-demo.html',
   styleUrls: ['overlay-demo.css'],
-  providers: [OVERLAY_PROVIDERS],
   encapsulation: ViewEncapsulation.None,
 })
 export class OverlayDemo {
@@ -44,9 +42,8 @@ export class OverlayDemo {
 
     this.nextPosition += 30;
 
-    this.overlay.create(config).then(ref => {
-      ref.attach(new ComponentPortal(RotiniPanel, this.viewContainerRef));
-    });
+    let overlayRef = this.overlay.create(config);
+    overlayRef.attach(new ComponentPortal(RotiniPanel, this.viewContainerRef));
   }
 
   openFusilliPanel() {
@@ -59,9 +56,8 @@ export class OverlayDemo {
 
     this.nextPosition += 30;
 
-    this.overlay.create(config).then(ref => {
-      ref.attach(this.templatePortals.first);
-    });
+    let overlayRef = this.overlay.create(config);
+    overlayRef.attach(this.templatePortals.first);
   }
 
   openSpaghettiPanel() {
@@ -75,9 +71,8 @@ export class OverlayDemo {
     let config = new OverlayState();
     config.positionStrategy = strategy;
 
-    this.overlay.create(config).then(ref => {
-      ref.attach(new ComponentPortal(SpagettiPanel, this.viewContainerRef));
-    });
+    let overlayRef = this.overlay.create(config);
+    overlayRef.attach(new ComponentPortal(SpagettiPanel, this.viewContainerRef));
   }
 }
 
