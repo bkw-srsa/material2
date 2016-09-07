@@ -1,9 +1,9 @@
+@import "fonts";
 @import 'theme-functions';
-
 
 // Typography
 $md-body-font-size-base: rem(1.4) !default;
-$md-font-family: Roboto, 'Helvetica Neue', sans-serif !default;
+$md-font-family: KlintPro-Regular, sans-serif !default;
 
 // Media queries
 $md-xsmall: 'max-width: 600px';
