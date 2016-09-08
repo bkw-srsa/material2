@@ -12,7 +12,7 @@ $md-input-required-placeholder-color: md-color($md-accent);
 // Underline colors.
 $md-input-underline-color: md-color($md-foreground, hint-text);
 $md-input-underline-color-accent: md-color($md-accent);
-$md-input-underline-color-warn: md-color($bkw-red,500,1);
+$md-input-underline-color-warn: md-color($bkw-red, 500, 1);
 $md-input-underline-disabled-color: md-color($md-foreground, hint-text);
 $md-input-underline-focused-color: md-color($md-primary);
 
@@ -28,6 +28,7 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
   box-shadow: none;
 }
 
+
 /**
  * Applies a floating placeholder above the input itself.
  */
@@ -41,6 +42,11 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
 
   }
 }
+
+.bkw-not-empty {
+  color: md-color($bkw-black, 500, 1) !important;
+}
+
 
 .bkw-disabled {
   color: md-color($bkw-green, 500, 1);
@@ -149,7 +155,7 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
     // :focus is applied to the input, but we apply md-focused to the other elements
     // that need to listen to it.
     &.md-focused {
-      //color: $md-input-floating-placeholder-color;
+      color: md-color($bkw-black, 500, 1);
 
       &.md-accent {
         //color: $md-input-underline-color-accent;
@@ -217,7 +223,7 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
     position: absolute;
     font-size: 75%;
     bottom: -0.5em;
-    color: md-color($bkw-blue,500,1);
+    color: md-color($bkw-blue, 500, 1);
     &.md-right {
       right: 0;
     }
