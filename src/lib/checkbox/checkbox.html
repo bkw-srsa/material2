@@ -13,8 +13,7 @@
            (blur)="_onInputBlur()"
            (change)="_onInteractionEvent($event)"
            (click)="_onInputClick($event)">
-    <div class="md-ink-ripple"></div>
-    <div class="md-checkbox-frame"></div>
+    <div [class.md-checkbox-frame-checked]="checked" class="md-checkbox-frame"></div>
     <div class="md-checkbox-background">
       <svg version="1.1"
            class="md-checkbox-checkmark"

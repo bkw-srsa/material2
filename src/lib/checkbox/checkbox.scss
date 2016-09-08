@@ -11,10 +11,11 @@ $md-checkbox-mark-stroke-size: 2/15 * $md-checkbox-size !default;
 $md-checkbox-border-width: 2px;
 /** The color of the checkbox border. */
 $md-checkbox-border-color: if($md-is-dark-theme, rgba(white, 0.7), rgba(black, 0.54)) !default;
+$md-checkbox-border-color-checked: md-color($bkw-blue,500,1) !default;
 /** The color of the checkbox's checkmark / mixedmark. */
-$md-checkbox-mark-color: md-color($md-background, background);
+$md-checkbox-mark-color: md-color($bkw-blue,500,1);
 /** The color that is used as the checkbox background when it is checked. */
-$md-checkbox-background-color: md-color($md-accent, 500);
+$md-checkbox-background-color: md-color($bkw-white,500,1);
 /** The base duration used for the majority of transitions for the checkbox. */
 $md-checkbox-transition-duration: 90ms;
 /** The amount of spacing between the checkbox and its label. */
@@ -254,6 +255,10 @@ md-checkbox {
   line-height: 24px;
 }
 
+.md-checkbox-frame-checked{
+  border: $md-checkbox-border-width solid $md-checkbox-border-color-checked !important;
+}
+
 .md-checkbox-frame {
   @extend %md-checkbox-outer-box;
 
@@ -265,7 +270,7 @@ md-checkbox {
 
 .md-checkbox-background {
   @extend %md-checkbox-outer-box;
-
+  z-index: -1;
   align-items: center;
   display: inline-flex;
   justify-content: center;
