@@ -1,0 +1,11 @@
+@import 'bkw-palette';
+@import 'theme-functions';
+
+.bkw-hint-color {
+  color: md-color($bkw-blue, 500, 1);
+
+  font-size: 0.6rem;
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}

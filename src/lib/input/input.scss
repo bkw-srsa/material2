@@ -12,7 +12,7 @@ $md-input-required-placeholder-color: md-color($md-accent);
 // Underline colors.
 $md-input-underline-color: md-color($md-foreground, hint-text);
 $md-input-underline-color-accent: md-color($md-accent);
-$md-input-underline-color-warn: md-color($md-warn);
+$md-input-underline-color-warn: md-color($bkw-red,500,1);
 $md-input-underline-disabled-color: md-color($md-foreground, hint-text);
 $md-input-underline-focused-color: md-color($md-primary);
 
@@ -38,8 +38,20 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
   width: 100% / $md-input-floating-placeholder-scale-factor;
 
   .md-placeholder-required {
-    color: $md-input-required-placeholder-color;
+
   }
+}
+
+.bkw-disabled {
+  color: md-color($bkw-green, 500, 1);
+}
+
+.bkw-invalid {
+  color: md-color($bkw-red, 500, 1) !important;
+}
+
+.bkw-enabled {
+  color: md-color($bkw-blue, 500, 1);
 }
 
 :host {
@@ -106,7 +118,7 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
     top: 0;
 
     font-size: 100%;
-    pointer-events: none;  // We shouldn't catch mouse events (let them through).
+    pointer-events: none; // We shouldn't catch mouse events (let them through).
     color: $md-input-placeholder-color;
     z-index: 1;
 
@@ -120,9 +132,9 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
     transform: translateY(0);
     transform-origin: bottom left;
     transition: transform $swift-ease-out-duration $swift-ease-out-timing-function,
-                scale $swift-ease-out-duration $swift-ease-out-timing-function,
-                color $swift-ease-out-duration $swift-ease-out-timing-function,
-                width $swift-ease-out-duration $swift-ease-out-timing-function;
+    scale $swift-ease-out-duration $swift-ease-out-timing-function,
+    color $swift-ease-out-duration $swift-ease-out-timing-function,
+    width $swift-ease-out-duration $swift-ease-out-timing-function;
 
     &.md-empty {
       display: block;
@@ -137,13 +149,13 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
     // :focus is applied to the input, but we apply md-focused to the other elements
     // that need to listen to it.
     &.md-focused {
-      color: $md-input-floating-placeholder-color;
+      //color: $md-input-floating-placeholder-color;
 
       &.md-accent {
-        color: $md-input-underline-color-accent;
+        //color: $md-input-underline-color-accent;
       }
       &.md-warn {
-        color: $md-input-underline-color-warn;
+        // color: $md-input-underline-color-warn;
       }
     }
   }
@@ -168,7 +180,7 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
 
     &.md-disabled {
       border-top: 0;
-      background-image: $md-input-underline-disabled-background-image;
+      background-color: md-color($bkw-black-25, 500);
       background-position: 0;
       background-size: 4px 1px;
       background-repeat: repeat-x;
@@ -185,10 +197,9 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
       opacity: 0;
       transform: scaleY(0);
       transition: transform $swift-ease-out-duration $swift-ease-out-timing-function,
-                  opacity $swift-ease-out-duration $swift-ease-out-timing-function;
+      opacity $swift-ease-out-duration $swift-ease-out-timing-function;
 
       &.md-accent {
-        background-color: $md-input-underline-color-accent;
       }
       &.md-warn {
         background-color: $md-input-underline-color-warn;
@@ -200,20 +211,18 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
       }
     }
   }
-
   // The hint is shown below the underline. There can be more than one; one at the start
   // and one at the end.
   .md-hint {
     position: absolute;
     font-size: 75%;
     bottom: -0.5em;
-
+    color: md-color($bkw-blue,500,1);
     &.md-right {
       right: 0;
     }
   }
 }
-
 
 // RTL support.
 :host-context([dir='rtl']) {
@@ -230,6 +239,7 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
   .md-hint {
     right: 0;
     left: auto;
+    color: md-color($bkw-blue, 500, 1);
 
     &.md-right {
       right: auto;
@@ -237,3 +247,4 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
     }
   }
 }
+
