@@ -77,7 +77,6 @@ export class MdPlaceholder {}
 
 
 /** The hint directive, used to tag content as hint labels (going under the input). */
-// FIXME hint color BUG does not set the style but class is applied?
 @Directive({
   selector: 'md-hint',
   host: {

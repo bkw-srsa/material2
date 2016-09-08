@@ -53,9 +53,6 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
 .bkw-enabled {
   color: md-color($bkw-blue, 500, 1);
 }
-.bkw-hint-color{
-  color: md-color($bkw-blue, 500, 1)!important;
-}
 
 :host {
   display: inline-block;
@@ -250,3 +247,4 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
     }
   }
 }
+
