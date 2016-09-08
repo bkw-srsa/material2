@@ -23,18 +23,9 @@ Folgende Schritte werden lokal ausgeführt und setzen voraus dass das originale 
 # Entwickeln:
 
 Alle Abhängigkeiten werden von unserem Nexus geholt. Dieser benötigt eine Authentifizierung.
-Dazu wird in der Datei .npmrc die Umgebungsvariable mit dem Token benötigt.
-Dieses Token ist persönlich und darf nicht eingecheckt werden, weil das Projekt auf github gehostet ist.
 
-Um ein solches Token zu erstellen sind folgende Schritte notwendig:
-
-1. npm login --registry=https://nexus.vc-nord.de/nexus/repository/npm/
-   In ~/.npmrc erscheint ein Eintrag (z.B.):
-    //nexus.vc-nord.de/nexus/repository/npm/:_authToken=1c39a7d5-272c-31c2-d0a7-2b06ea9cce19
-2. Das token muss als Umgebungsvariable bereitgestellt werden:
-   export NPM_TOKEN=1c39a7d5-272c-31c2-d0a7-2b06ea9cce19
+   npm login --registry=https://nexus.vc-nord.de/nexus/repository/npm/
    
-Weitere Infos: https://docs.npmjs.com/private-modules/ci-server-config#getting-an-authentication-token
 
 # Versionierung:
 
