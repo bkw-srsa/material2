@@ -28,7 +28,6 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
   box-shadow: none;
 }
 
-
 /**
  * Applies a floating placeholder above the input itself.
  */
@@ -46,7 +45,6 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
 .bkw-not-empty {
   color: md-color($bkw-black, 500, 1) !important;
 }
-
 
 .bkw-disabled {
   color: md-color($bkw-green, 500, 1);
@@ -186,7 +184,7 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
 
     &.md-disabled {
       border-top: 0;
-      background-color: md-color($bkw-black-25, 500);
+      background-color: md-color($bkw-black-25, 500, 0);
       background-position: 0;
       background-size: 4px 1px;
       background-repeat: repeat-x;
