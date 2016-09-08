@@ -7,6 +7,9 @@
              aria-target
              class="md-input-element"
              [class.md-end]="align == 'end'"
+             [class.bkw-disabled]="disabled"
+             [class.bkw-enabled]="!disabled"
+             [class.bkw-invalid]="dividerColor == 'warn'"
              [attr.aria-label]="ariaLabel"
              [attr.aria-labelledby]="ariaLabelledBy"
              [attr.aria-disabled]="ariaDisabled"

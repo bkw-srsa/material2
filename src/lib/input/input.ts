@@ -81,7 +81,8 @@ export class MdPlaceholder {}
   selector: 'md-hint',
   host: {
     '[class.md-right]': 'align == "end"',
-    '[class.md-hint]': 'true'
+    '[class.md-hint]': 'true',
+    '[class.bkw-hint-color]':'true',
   }
 })
 export class MdHint {
