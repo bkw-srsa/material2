@@ -168,7 +168,7 @@ $md-input-underline-disabled-background-image: linear-gradient(to right,
 
     &.md-disabled {
       border-top: 0;
-      background-image: $md-input-underline-disabled-background-image;
+      background-color: md-color($bkw-black-25, 500);
       background-position: 0;
       background-size: 4px 1px;
       background-repeat: repeat-x;
