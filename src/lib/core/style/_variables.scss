@@ -1,9 +1,9 @@
+@import 'fonts';
 @import '../typography/typography';
-
 
 // Typography
 $md-body-font-size-base: rem(1.4) !default;
-$md-font-family: Roboto, 'Helvetica Neue', sans-serif !default;
+$md-font-family: KlintPro-Regular, 'KlintPro-Regular', sans-serif !default;
 
 // Media queries
 $md-xsmall: 'max-width: 600px';
@@ -18,7 +18,6 @@ $z-index-drawer: 100 !default;
 $md-z-index-overlay: 1000;
 $md-z-index-overlay-container: 1;
 $md-z-index-overlay-backdrop: 1;
-
 
 // Global constants
 $pi: 3.14159265;

@@ -1,11 +1,30 @@
+@import '../core/theming/theming';
+@import '../core/theming/bkw-theme/bkw-palette';
 @import '../core/style/variables';
 
+//START - BKW custom theme
+.bkw-disabled {
+  color: md-color($bkw-green, 400) !important;
+}
+
+.bkw-enabled {
+  color: md-color($bkw-blue, 400) !important;
+}
+
+.bkw-invalid {
+  color: md-color($bkw-red, 400) !important;
+}
+
+//END - BKW custom theme
 
 $md-input-floating-placeholder-scale-factor: 0.75 !default;
 
 // Gradient for showing the dashed line when the input is disabled.
-$md-input-underline-disabled-background-image:
-    linear-gradient(to right, rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.26) 33%, transparent 0%);
+//START - BKW custom theme
+$md-input-underline-disabled-background-image: none;
+
+//linear-gradient(to right, rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.26) 33%, transparent 0%);
+//END - BKW custom theme
 
 // Applies a floating placeholder above the input itself.
 @mixin md-input-placeholder-floating {
@@ -32,6 +51,7 @@ md-input {
 // cannot apply it to the host element directly.
 .md-input-wrapper {
   margin: 16px 0;
+  color: md-color($bkw-blue, 400);
 }
 
 // We use a table layout to baseline align the prefix and suffix classes.
@@ -106,7 +126,7 @@ md-input {
   top: 0;
 
   font-size: 100%;
-  pointer-events: none;  // We shouldn't catch mouse events (let them through).
+  pointer-events: none; // We shouldn't catch mouse events (let them through).
   z-index: 1;
 
   // Put ellipsis text overflow.
@@ -119,9 +139,9 @@ md-input {
   transform: translateY(0);
   transform-origin: bottom left;
   transition: transform $swift-ease-out-duration $swift-ease-out-timing-function,
-              scale $swift-ease-out-duration $swift-ease-out-timing-function,
-              color $swift-ease-out-duration $swift-ease-out-timing-function,
-              width $swift-ease-out-duration $swift-ease-out-timing-function;
+  scale $swift-ease-out-duration $swift-ease-out-timing-function,
+  color $swift-ease-out-duration $swift-ease-out-timing-function,
+  width $swift-ease-out-duration $swift-ease-out-timing-function;
 
   &.md-empty {
     display: block;
@@ -166,7 +186,7 @@ md-input {
     opacity: 0;
     transform: scaleY(0);
     transition: transform $swift-ease-out-duration $swift-ease-out-timing-function,
-                opacity $swift-ease-out-duration $swift-ease-out-timing-function;
+    opacity $swift-ease-out-duration $swift-ease-out-timing-function;
 
     &.md-focused {
       opacity: 1;

@@ -1,3 +1,4 @@
+@import 'bkw-theme/bkw-palette';
 @import 'palette';
 
 
@@ -59,7 +60,7 @@
 
 
 // Creates a container object for a light theme to be given to individual component theme mixins.
-@function md-light-theme($primary, $accent, $warn: md-palette($md-red)) {
+@function md-light-theme($primary, $accent, $warn: md-palette($bkw-red)) {
   @return (
     primary: $primary,
     accent: $accent,
