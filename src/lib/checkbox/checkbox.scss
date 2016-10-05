@@ -1,34 +1,24 @@
-@import 'default-theme';
-@import 'theme-functions';
-@import 'variables';
-@import 'mixins';
+@import '../core/theming/theming';
+@import '../core/style/variables';
+@import '../core/ripple/ripple';
 
-/** The width/height of the checkbox element. */
-$md-checkbox-size: 2.5rem !default;
-/** The width of the line used to draw the checkmark / mixedmark. */
-$md-checkbox-mark-stroke-size: 1/40 * $md-checkbox-size !default;
-/** The width of the checkbox border shown when the checkbox is unchecked. */
+
+// The width/height of the checkbox element.
+$md-checkbox-size: $md-toggle-size !default;
+// The width of the line used to draw the checkmark / mixedmark.
+$md-checkbox-mark-stroke-size: 2/15 * $md-checkbox-size !default;
+// The width of the checkbox border shown when the checkbox is unchecked.
 $md-checkbox-border-width: 2px;
-/** The color of the checkbox border. */
-$md-checkbox-border-color: if($md-is-dark-theme, rgba(white, 0.7), rgba(black, 0.54)) !default;
-$md-checkbox-border-color-checked: md-color($bkw-blue, 500, 1) !default;
-$md-checkbox-border-color-checked-disabled: md-color($bkw-green, 500, 1) !default;
-/** The color of the checkbox's checkmark / mixedmark. */
-$md-checkbox-mark-color: md-color($bkw-blue, 500, 1);
-/** The color that is used as the checkbox background when it is checked. */
-$md-checkbox-background-color: md-color($bkw-white, 500, 1);
-/** The base duration used for the majority of transitions for the checkbox. */
+// The base duration used for the majority of transitions for the checkbox.
 $md-checkbox-transition-duration: 90ms;
-/** The amount of spacing between the checkbox and its label. */
+// The amount of spacing between the checkbox and its label.
 $md-checkbox-item-spacing: $md-toggle-padding;
 
 // Manual calculation done on SVG
 $_md-checkbox-mark-path-length: 22.910259;
 $_md-checkbox-indeterminate-checked-easing-function: cubic-bezier(0.14, 0, 0, 1);
 
-/**
- * Fades in the background of the checkbox when it goes from unchecked -> {checked,indeterminate}.
- */
+// Fades in the background of the checkbox when it goes from unchecked -> {checked,indeterminate}.
 @keyframes md-checkbox-fade-in-background {
   0% {
     opacity: 0;
@@ -39,9 +29,7 @@ $_md-checkbox-indeterminate-checked-easing-function: cubic-bezier(0.14, 0, 0, 1)
   }
 }
 
-/**
- * Fades out the background of the checkbox when it goes from {checked,indeterminate} -> unchecked.
- */
+// Fades out the background of the checkbox when it goes from {checked,indeterminate} -> unchecked.
 @keyframes md-checkbox-fade-out-background {
   0%, 50% {
     opacity: 1;
@@ -52,9 +40,7 @@ $_md-checkbox-indeterminate-checked-easing-function: cubic-bezier(0.14, 0, 0, 1)
   }
 }
 
-/**
- * "Draws" in the checkmark when the checkbox goes from unchecked -> checked.
- */
+// "Draws" in the checkmark when the checkbox goes from unchecked -> checked.
 @keyframes md-checkbox-unchecked-checked-checkmark-path {
   0%, 50% {
     stroke-dashoffset: $_md-checkbox-mark-path-length;
@@ -69,9 +55,7 @@ $_md-checkbox-indeterminate-checked-easing-function: cubic-bezier(0.14, 0, 0, 1)
   }
 }
 
-/**
- * Horizontally expands the mixedmark when the checkbox goes from unchecked -> indeterminate.
- */
+// Horizontally expands the mixedmark when the checkbox goes from unchecked -> indeterminate.
 @keyframes md-checkbox-unchecked-indeterminate-mixedmark {
   0%, 68.2% {
     transform: scaleX(0);
@@ -86,9 +70,7 @@ $_md-checkbox-indeterminate-checked-easing-function: cubic-bezier(0.14, 0, 0, 1)
   }
 }
 
-/**
- * "Erases" the checkmark when the checkbox goes from checked -> unchecked.
- */
+// "Erases" the checkmark when the checkbox goes from checked -> unchecked.
 @keyframes md-checkbox-checked-unchecked-checkmark-path {
   from {
     animation-timing-function: $md-fast-out-linear-in-timing-function;
@@ -100,10 +82,9 @@ $_md-checkbox-indeterminate-checked-easing-function: cubic-bezier(0.14, 0, 0, 1)
   }
 }
 
-/**
- * Rotates and fades out the checkmark when the checkbox goes from checked -> indeterminate. This
- * animation helps provide the illusion of the checkmark "morphing" into the mixedmark.
- */
+
+// Rotates and fades out the checkmark when the checkbox goes from checked -> indeterminate. This
+// animation helps provide the illusion of the checkmark "morphing" into the mixedmark.
 @keyframes md-checkbox-checked-indeterminate-checkmark {
   from {
     animation-timing-function: $md-linear-out-slow-in-timing-function;
@@ -117,11 +98,9 @@ $_md-checkbox-indeterminate-checked-easing-function: cubic-bezier(0.14, 0, 0, 1)
   }
 }
 
-/**
- * Rotates and fades the checkmark back into position when the checkbox goes from indeterminate ->
- * checked. This animation helps provide the illusion that the mixedmark is "morphing" into the
- * checkmark.
- */
+// Rotates and fades the checkmark back into position when the checkbox goes from indeterminate ->
+// checked. This animation helps provide the illusion that the mixedmark is "morphing" into the
+// checkmark.
 @keyframes md-checkbox-indeterminate-checked-checkmark {
   from {
     animation-timing-function: $_md-checkbox-indeterminate-checked-easing-function;
@@ -135,11 +114,9 @@ $_md-checkbox-indeterminate-checked-easing-function: cubic-bezier(0.14, 0, 0, 1)
   }
 }
 
-/**
- * Rotates and fades in the mixedmark when the checkbox goes from checked -> indeterminate. This
- * animation, similar to md-checkbox-checked-indeterminate-checkmark, helps provide an illusion
- * of "morphing" from checkmark -> mixedmark.
- */
+// Rotates and fades in the mixedmark when the checkbox goes from checked -> indeterminate. This
+// animation, similar to md-checkbox-checked-indeterminate-checkmark, helps provide an illusion
+// of "morphing" from checkmark -> mixedmark.
 @keyframes md-checkbox-checked-indeterminate-mixedmark {
   from {
     animation-timing-function: $md-linear-out-slow-in-timing-function;
@@ -153,11 +130,9 @@ $_md-checkbox-indeterminate-checked-easing-function: cubic-bezier(0.14, 0, 0, 1)
   }
 }
 
-/**
- * Rotates and fades out the mixedmark when the checkbox goes from indeterminate -> checked. This
- * animation, similar to md-checkbox-indeterminate-checked-checkmark, helps provide an illusion
- * of "morphing" from mixedmark -> checkmark.
- */
+// Rotates and fades out the mixedmark when the checkbox goes from indeterminate -> checked. This
+// animation, similar to md-checkbox-indeterminate-checked-checkmark, helps provide an illusion
+// of "morphing" from mixedmark -> checkmark.
 @keyframes md-checkbox-indeterminate-checked-mixedmark {
   from {
     animation-timing-function: $_md-checkbox-indeterminate-checked-easing-function;
@@ -171,10 +146,9 @@ $_md-checkbox-indeterminate-checked-easing-function: cubic-bezier(0.14, 0, 0, 1)
   }
 }
 
-/**
- * Horizontally collapses and fades out the mixedmark when the checkbox goes from indeterminate ->
- * unchecked.
- */
+
+// Horizontally collapses and fades out the mixedmark when the checkbox goes from indeterminate ->
+// unchecked.
 @keyframes md-checkbox-indeterminate-unchecked-mixedmark {
   0% {
     animation-timing-function: linear;
@@ -188,9 +162,7 @@ $_md-checkbox-indeterminate-checked-easing-function: cubic-bezier(0.14, 0, 0, 1)
   }
 }
 
-/**
- * Applied to elements that cover the checkbox's entire inner container.
- */
+// Applied to elements that cover the checkbox's entire inner container.
 %md-checkbox-cover-element {
   bottom: 0;
   left: 0;
@@ -199,19 +171,15 @@ $_md-checkbox-indeterminate-checked-easing-function: cubic-bezier(0.14, 0, 0, 1)
   top: 0;
 }
 
-/**
- * Applied to elements that are considered "marks" within the checkbox, e.g. the checkmark and
- * the mixedmark.
- */
+// Applied to elements that are considered "marks" within the checkbox, e.g. the checkmark and
+// the mixedmark.
 %md-checkbox-mark {
   $width-padding-inset: 2 * $md-checkbox-border-width;
   width: calc(100% - #{$width-padding-inset});
 }
 
-/**
- * Applied to elements that appear to make up the outer box of the checkmark, such as the frame
- * that contains the border and the actual background element that contains the marks.
- */
+// Applied to elements that appear to make up the outer box of the checkmark, such as the frame
+// that contains the border and the actual background element that contains the marks.
 %md-checkbox-outer-box {
   @extend %md-checkbox-cover-element;
   border-radius: 2px;
@@ -254,34 +222,26 @@ md-checkbox {
 // TODO(kara): Remove this style when fixing vertical baseline
 .md-checkbox-layout .md-checkbox-label {
   line-height: 24px;
-  align-self: center;
-}
-
-.md-checkbox-frame-checked {
-  border: $md-checkbox-border-width solid $md-checkbox-border-color-checked !important;
-}
-
-.md-checkbox-frame-checked-disabled {
-  border: $md-checkbox-border-width solid $md-checkbox-border-color-checked-disabled !important;
 }
 
 .md-checkbox-frame {
   @extend %md-checkbox-outer-box;
 
   background-color: transparent;
-  border: $md-checkbox-border-width solid $md-checkbox-border-color;
+  border: $md-checkbox-border-width solid;
   transition: border-color $md-checkbox-transition-duration $md-linear-out-slow-in-timing-function;
   will-change: border-color;
 }
 
 .md-checkbox-background {
   @extend %md-checkbox-outer-box;
-  z-index: -1;
+
   align-items: center;
   display: inline-flex;
   justify-content: center;
-  transition: background-color $md-checkbox-transition-duration $md-linear-out-slow-in-timing-function,
-  opacity $md-checkbox-transition-duration $md-linear-out-slow-in-timing-function;
+  transition: background-color $md-checkbox-transition-duration
+                  $md-linear-out-slow-in-timing-function,
+              opacity $md-checkbox-transition-duration $md-linear-out-slow-in-timing-function;
   will-change: background-color, opacity;
 }
 
@@ -289,32 +249,20 @@ md-checkbox {
   @extend %md-checkbox-cover-element;
   @extend %md-checkbox-mark;
 
-  fill: $md-checkbox-mark-color;
   width: 100%;
 }
 
 .md-checkbox-checkmark-path {
-  // !important is needed here because a stroke must be set as an attribute on the SVG in order
-  // for line animation to work properly.
-  stroke: $md-checkbox-mark-color !important;
   stroke: {
     dashoffset: $_md-checkbox-mark-path-length;
     dasharray: $_md-checkbox-mark-path-length;
     width: $md-checkbox-mark-stroke-size;
   }
-
-}
-
-.md-checkbox-checkmark-path-disabled {
-  // !important is needed here because a stroke must be set as an attribute on the SVG in order
-  // for line animation to work properly.
-  stroke: $md-checkbox-border-color-checked-disabled !important;
 }
 
 .md-checkbox-mixedmark {
   @extend %md-checkbox-mark;
 
-  background-color: $md-checkbox-mark-color;
   height: floor($md-checkbox-mark-stroke-size);
   opacity: 0;
   transform: scaleX(0) rotate(0deg);
@@ -349,17 +297,9 @@ md-checkbox {
   .md-checkbox-mixedmark {
     transform: scaleX(1) rotate(-45deg);
   }
-
-  .md-checkbox-background {
-    z-index: 0;
-  }
 }
 
 .md-checkbox-indeterminate {
-  .md-checkbox-background {
-    background-color: $md-checkbox-background-color;
-  }
-
   .md-checkbox-checkmark {
     opacity: 0;
     transform: rotate(45deg);
@@ -375,6 +315,7 @@ md-checkbox {
   }
 }
 
+
 .md-checkbox-unchecked {
   .md-checkbox-background {
     background-color: transparent;
@@ -382,26 +323,7 @@ md-checkbox {
 }
 
 .md-checkbox-disabled {
-  // NOTE(traviskaufman): While the spec calls for translucent blacks/whites for disabled colors,
-  // this does not work well with elements layered on top of one another. To get around this we
-  // blend the colors together based on the base color and the theme background.
-  $white-30pct-opacity-on-dark-theme: #686868;
-  $black-26pct-opacity-on-light-theme: #b0b0b0;
-  $disabled-color: md-color($bkw-green, 500, 1);
   cursor: default;
-
-  &.md-checkbox-checked,
-  &.md-checkbox-indeterminate {
-    .md-checkbox-background {
-      background-color: md-color($bkw-white, 500, 1);
-    }
-  }
-
-  &:not(.md-checkbox-checked) {
-    .md-checkbox-frame {
-      border-color: md-color($bkw-green, 500, 1);
-    }
-  }
 }
 
 .md-checkbox-anim {
@@ -416,7 +338,8 @@ md-checkbox {
       // Instead of delaying the animation, we simply multiply its length by 2 and begin the
       // animation at 50% in order to prevent a flash of styles applied to a checked checkmark
       // as the background is fading in before the animation begins.
-      animation: $md-checkbox-transition-duration * 2 linear 0ms md-checkbox-unchecked-checked-checkmark-path;
+      animation:
+        $md-checkbox-transition-duration * 2 linear 0ms md-checkbox-unchecked-checked-checkmark-path;
     }
   }
 
@@ -426,7 +349,8 @@ md-checkbox {
     }
 
     .md-checkbox-mixedmark {
-      animation: $md-checkbox-transition-duration linear 0ms md-checkbox-unchecked-indeterminate-mixedmark;
+      animation:
+        $md-checkbox-transition-duration linear 0ms md-checkbox-unchecked-indeterminate-mixedmark;
     }
   }
 
@@ -436,27 +360,32 @@ md-checkbox {
     }
 
     .md-checkbox-checkmark-path {
-      animation: $md-checkbox-transition-duration linear 0ms md-checkbox-checked-unchecked-checkmark-path;
+      animation:
+        $md-checkbox-transition-duration linear 0ms md-checkbox-checked-unchecked-checkmark-path;
     }
   }
 
   &-checked-indeterminate {
     .md-checkbox-checkmark {
-      animation: $md-checkbox-transition-duration linear 0ms md-checkbox-checked-indeterminate-checkmark;
+      animation:
+        $md-checkbox-transition-duration linear 0ms md-checkbox-checked-indeterminate-checkmark;
     }
 
     .md-checkbox-mixedmark {
-      animation: $md-checkbox-transition-duration linear 0ms md-checkbox-checked-indeterminate-mixedmark;
+      animation:
+        $md-checkbox-transition-duration linear 0ms md-checkbox-checked-indeterminate-mixedmark;
     }
   }
 
   &-indeterminate-checked {
     .md-checkbox-checkmark {
-      animation: $indeterminate-change-duration linear 0ms md-checkbox-indeterminate-checked-checkmark;
+      animation:
+        $indeterminate-change-duration linear 0ms md-checkbox-indeterminate-checked-checkmark;
     }
 
     .md-checkbox-mixedmark {
-      animation: $indeterminate-change-duration linear 0ms md-checkbox-indeterminate-checked-mixedmark;
+      animation:
+        $indeterminate-change-duration linear 0ms md-checkbox-indeterminate-checked-mixedmark;
     }
   }
 
@@ -466,15 +395,18 @@ md-checkbox {
     }
 
     .md-checkbox-mixedmark {
-      animation: $indeterminate-change-duration * 0.6 linear 0ms md-checkbox-indeterminate-unchecked-mixedmark;
+      animation:
+        $indeterminate-change-duration * 0.6 linear 0ms
+        md-checkbox-indeterminate-unchecked-mixedmark;
     }
   }
 }
 
-// Underlying native input element.
-// Visually hidden but still able to respond to focus.
 .md-checkbox-input {
-  @include md-visually-hidden;
+  // Move the input to the bottom and in the middle.
+  // Visual improvement to properly show browser popups when being required.
+  bottom: 0;
+  left: 50%;
 }
 
 @include md-temporary-ink-ripple(checkbox);

@@ -17,9 +17,9 @@ import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR
 } from '@angular/forms';
-import {BooleanFieldValue, applyCssTransform} from '@angular2-material/core';
+import {BooleanFieldValue, applyCssTransform} from '../core';
 import {Observable} from 'rxjs/Observable';
-import {MdGestureConfig} from '@angular2-material/core';
+import {MdGestureConfig} from '../core';
 
 
 export const MD_SLIDE_TOGGLE_VALUE_ACCESSOR: any = {
@@ -66,6 +66,7 @@ export class MdSlideToggle implements AfterContentInit, ControlValueAccessor {
   private _slideRenderer: SlideToggleRenderer = null;
 
   @Input() @BooleanFieldValue() disabled: boolean = false;
+  @Input() @BooleanFieldValue() required: boolean = false;
   @Input() name: string = null;
   @Input() id: string = this._uniqueId;
   @Input() tabIndex: number = 0;

@@ -7,24 +7,24 @@ import {
   OverlayState,
   ComponentPortal,
   OVERLAY_PROVIDERS,
-} from '@angular2-material/core';
-import {ComponentType} from '@angular2-material/core';
+} from '../core';
+import {ComponentType} from '../core';
 import {MdDialogConfig} from './dialog-config';
 import {MdDialogRef} from './dialog-ref';
 import {DialogInjector} from './dialog-injector';
 import {MdDialogContainer} from './dialog-container';
+import {A11yModule} from '../core/a11y/index';
 
 export {MdDialogConfig} from './dialog-config';
 export {MdDialogRef} from './dialog-ref';
 
 
-// TODO(jelbourn): add shortcuts for `alert` and `confirm`.
 // TODO(jelbourn): add support for opening with a TemplateRef
 // TODO(jelbourn): add `closeAll` method
-// TODO(jelbourn): add backdrop
 // TODO(jelbourn): default dialog config
-// TODO(jelbourn): focus trapping
-// TODO(jelbourn): potentially change API from accepting component constructor to component factory.
+// TODO(jelbourn): escape key closes dialog
+// TODO(jelbourn): dialog content directives (e.g., md-dialog-header)
+// TODO(jelbourn): animations
 
 
 
@@ -87,6 +87,12 @@ export class MdDialog {
     // to modify and close it.
     let dialogRef = <MdDialogRef<T>> new MdDialogRef(overlayRef);
 
+    // When the dialog backdrop is clicked, we want to close it.
+    overlayRef.backdropClick().subscribe(() => dialogRef.close());
+
+    // Set the dialogRef to the container so that it can use the ref to close the dialog.
+    dialogContainer.dialogRef = dialogRef;
+
     // We create an injector specifically for the component we're instantiating so that it can
     // inject the MdDialogRef. This allows a component loaded inside of a dialog to close itself
     // and, optionally, to return a value.
@@ -108,6 +114,7 @@ export class MdDialog {
   private _getOverlayState(dialogConfig: MdDialogConfig): OverlayState {
     let state = new OverlayState();
 
+    state.hasBackdrop = true;
     state.positionStrategy = this._overlay.position()
         .global()
         .centerHorizontally()
@@ -119,7 +126,7 @@ export class MdDialog {
 
 
 @NgModule({
-  imports: [OverlayModule, PortalModule],
+  imports: [OverlayModule, PortalModule, A11yModule],
   exports: [MdDialogContainer],
   declarations: [MdDialogContainer],
   entryComponents: [MdDialogContainer],
@@ -128,7 +135,7 @@ export class MdDialogModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: MdDialogModule,
-      providers: [MdDialog, OVERLAY_PROVIDERS],
+      providers: [MdDialog, OVERLAY_PROVIDERS, A11yModule.forRoot().providers],
     };
   }
 }

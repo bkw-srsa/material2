@@ -218,11 +218,21 @@ describe('MdSidenav', () => {
     it('should correctly parse opened="true"', () => {
       let fixture = TestBed.createComponent(SidenavSetToOpenedTrue);
       fixture.detectChanges();
+      endSidenavTransition(fixture);
 
       let sidenavEl = fixture.debugElement.query(By.css('md-sidenav')).nativeElement;
 
       expect(sidenavEl.classList).not.toContain('md-sidenav-closed');
       expect(sidenavEl.classList).toContain('md-sidenav-opened');
+    });
+
+    it('should remove align attr from DOM', () => {
+      const fixture = TestBed.createComponent(BasicTestApp);
+      fixture.detectChanges();
+
+      const sidenavEl = fixture.debugElement.query(By.css('md-sidenav')).nativeElement;
+      expect(sidenavEl.hasAttribute('align'))
+          .toBe(false, 'Expected sidenav not to have a native align attribute.');
     });
 
   });

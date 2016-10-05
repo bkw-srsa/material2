@@ -1,9 +1,10 @@
 import {task, watch} from 'gulp';
-import {readdirSync, statSync, writeFileSync} from 'fs';
+import {readdirSync, statSync, readFileSync} from 'fs';
 import * as path from 'path';
 
 import {SOURCE_ROOT, DIST_COMPONENTS_ROOT, PROJECT_ROOT} from '../constants';
-import {sassBuildTask, tsBuildTask, execNodeTask, copyTask} from '../task_helpers';
+import {sassBuildTask, tsBuildTask, execNodeTask, copyTask, sequenceTask} from '../task_helpers';
+import {writeFileSync} from 'fs';
 
 // No typings for these.
 const inlineResources = require('../../../scripts/release/inline-resources');
@@ -12,15 +13,14 @@ const rollup = require('rollup').rollup;
 const componentsDir = path.join(SOURCE_ROOT, 'lib');
 
 
-function camelCase(str: string) {
-  return str.replace(/-(\w)/g, (_: any, letter: string) => {
-    return letter.toUpperCase();
-  })
-}
-
-
 task(':watch:components', () => {
   watch(path.join(componentsDir, '**/*.ts'), [':build:components:ts']);
+  watch(path.join(componentsDir, '**/*.scss'), [':build:components:scss']);
+  watch(path.join(componentsDir, '**/*.html'), [':build:components:assets']);
+});
+
+task(':watch:components:spec', () => {
+  watch(path.join(componentsDir, '**/*.ts'), [':build:components:spec']);
   watch(path.join(componentsDir, '**/*.scss'), [':build:components:scss']);
   watch(path.join(componentsDir, '**/*.html'), [':build:components:assets']);
 });
@@ -28,15 +28,14 @@ task(':watch:components', () => {
 
 task(':build:components:ts', tsBuildTask(componentsDir));
 task(':build:components:spec', tsBuildTask(path.join(componentsDir, 'tsconfig-spec.json')));
-task(':build:components:assets',
-     copyTask(path.join(componentsDir, '*/**/*.!(ts|spec.ts)'), DIST_COMPONENTS_ROOT));
+task(':build:components:assets', copyTask([
+  path.join(componentsDir, '**/*.!(ts|spec.ts)'),
+  path.join(PROJECT_ROOT, 'README.md'),
+], DIST_COMPONENTS_ROOT));
 task(':build:components:scss', sassBuildTask(
   DIST_COMPONENTS_ROOT, componentsDir, [path.join(componentsDir, 'core/style')]
 ));
-task(':build:components:rollup', [':build:components:ts'], () => {
-  const components = readdirSync(componentsDir)
-    .filter(componentName => (statSync(path.join(componentsDir, componentName))).isDirectory());
-
+task(':build:components:rollup', [':build:components:inline'], () => {
   const globals: {[name: string]: string} = {
     // Angular dependencies
     '@angular/core': 'ng.core',
@@ -59,40 +58,44 @@ task(':build:components:rollup', [':build:components:ts'], () => {
     'rxjs/add/operator/catch': 'Rx.Observable.prototype',
     'rxjs/Observable': 'Rx'
   };
-  components.forEach(name => {
-    globals[`@angular2-material/${name}`] = `md.${camelCase(name)}`
-  });
 
-  // Build all of them asynchronously.
-  return components.reduce((previous, name) => {
-    return previous
-      .then(() => {
-        return rollup({
-          entry: path.join(DIST_COMPONENTS_ROOT, name, 'index.js'),
-          context: 'window',
-          external: [
-            ...Object.keys(globals),
-            ...components.map(name => `@angular2-material/${name}`)
-          ]
-        });
-      })
-      .then((bundle: any) => {
-        const result = bundle.generate({
-          moduleName: `md.${camelCase(name)}`,
-          format: 'umd',
-          globals
-        });
-        const outputPath = path.join(DIST_COMPONENTS_ROOT, name, `${name}.umd.js`);
-        writeFileSync( outputPath, result.code );
-      });
-  }, Promise.resolve());
+  // Rollup the @angular/material UMD bundle from all ES5 + imports JavaScript files built.
+  return rollup({
+    entry: path.join(DIST_COMPONENTS_ROOT, 'index.js'),
+    context: 'this',
+    external: Object.keys(globals)
+  }).then((bundle: { generate: any }) => {
+    const result = bundle.generate({
+      moduleName: 'ng.material',
+      format: 'umd',
+      globals,
+      sourceMap: true,
+      dest: path.join(DIST_COMPONENTS_ROOT, 'material.umd.js')
+    });
+
+    // Add source map URL to the code.
+    result.code += '\n\n//# sourceMappingURL=./material.umd.js.map\n';
+    // Format mapping to show properly in the browser. Rollup by default will put the path
+    // as relative to the file, and since that path is in src/lib and the file is in
+    // dist/@angular/material, we need to kill a few `../`.
+    result.map.sources = result.map.sources.map((s: string) => s.replace(/^(\.\.\/)+/, ''));
+
+    writeFileSync(path.join(DIST_COMPONENTS_ROOT, 'material.umd.js'), result.code, 'utf8');
+    writeFileSync(path.join(DIST_COMPONENTS_ROOT, 'material.umd.js.map'), result.map, 'utf8');
+  });
 });
 
-task('build:components', [
+task(':build:components:inline', [
+  ':build:components:ts',
+  ':build:components:scss',
+  ':build:components:assets'
+], () => {
+  return inlineResources(DIST_COMPONENTS_ROOT);
+});
+
+task('build:components', sequenceTask(
   ':build:components:rollup',
-  ':build:components:assets',
-  ':build:components:scss'
-], () => inlineResources([DIST_COMPONENTS_ROOT]));
+));
 
 task(':build:components:ngc', ['build:components'], execNodeTask(
   '@angular/compiler-cli', 'ngc', ['-p', path.relative(PROJECT_ROOT, path.join(componentsDir, 'tsconfig.json'))]

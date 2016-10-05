@@ -10,8 +10,7 @@ import {
   ModuleWithProviders,
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {BooleanFieldValue} from '@angular2-material/core';
-import {MdRippleModule} from '@angular2-material/core';
+import {BooleanFieldValue, MdRippleModule} from '../core';
 
 // TODO(jelbourn): Make the `isMouseDown` stuff done with one global listener.
 // TODO(kara): Convert attribute selectors to classes when attr maps become available
@@ -21,7 +20,6 @@ import {MdRippleModule} from '@angular2-material/core';
   moduleId: module.id,
   selector: 'button[md-button], button[md-raised-button], button[md-icon-button], ' +
             'button[md-fab], button[md-mini-fab]',
-  inputs: ['color'],
   host: {
     '[class.md-button-focus]': '_isKeyboardFocused',
     '(mousedown)': '_setMousedown()',
@@ -47,6 +45,7 @@ export class MdButton {
 
   constructor(private _elementRef: ElementRef, private _renderer: Renderer) { }
 
+  @Input()
   get color(): string {
     return this._color;
   }

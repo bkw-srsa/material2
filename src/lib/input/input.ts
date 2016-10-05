@@ -16,6 +16,7 @@ import {
   Output,
   NgModule,
   ModuleWithProviders,
+  ViewEncapsulation,
 } from '@angular/core';
 import {
   NG_VALUE_ACCESSOR,
@@ -23,7 +24,7 @@ import {
   FormsModule,
 } from '@angular/forms';
 import {CommonModule} from '@angular/common';
-import {BooleanFieldValue, MdError} from '@angular2-material/core';
+import {BooleanFieldValue, MdError} from '../core';
 import {Observable} from 'rxjs/Observable';
 
 
@@ -101,7 +102,8 @@ export class MdHint {
   templateUrl: 'input.html',
   styleUrls: ['input.css'],
   providers: [MD_INPUT_CONTROL_VALUE_ACCESSOR],
-  host: {'(click)' : 'focus()'}
+  host: {'(click)' : 'focus()'},
+  encapsulation: ViewEncapsulation.None,
 })
 export class MdInput implements ControlValueAccessor, AfterContentInit, OnChanges {
   private _focused: boolean = false;
@@ -129,7 +131,7 @@ export class MdInput implements ControlValueAccessor, AfterContentInit, OnChange
 
   /** Readonly properties. */
   get focused() { return this._focused; }
-  get empty() { return this._value == null || this._value === ''; }
+  get empty() { return (this._value == null || this._value === '') && this.type !== 'date'; }
   get characterCount(): number {
     return this.empty ? 0 : ('' + this._value).length;
   }

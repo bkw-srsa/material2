@@ -4,7 +4,7 @@ import {HttpModule} from '@angular/http';
 import {FormsModule} from '@angular/forms';
 import {DemoApp, Home} from './demo-app/demo-app';
 import {RouterModule} from '@angular/router';
-import {MaterialModule} from '@angular2-material/all';
+import {MaterialModule} from '@angular/material';
 import {DEMO_APP_ROUTES} from './demo-app/routes';
 import {ProgressBarDemo} from './progress-bar/progress-bar-demo';
 import {JazzDialog, DialogDemo} from './dialog/dialog-demo';
@@ -26,8 +26,10 @@ import {SlideToggleDemo} from './slide-toggle/slide-toggle-demo';
 import {ToolbarDemo} from './toolbar/toolbar-demo';
 import {ButtonDemo} from './button/button-demo';
 import {MdCheckboxDemoNestedChecklist, CheckboxDemo} from './checkbox/checkbox-demo';
+import {SelectDemo} from './select/select-demo';
 import {SliderDemo} from './slider/slider-demo';
 import {SidenavDemo} from './sidenav/sidenav-demo';
+import {SnackBarDemo} from './snack-bar/snack-bar-demo';
 import {PortalDemo, ScienceJoke} from './portal/portal-demo';
 import {MenuDemo} from './menu/menu-demo';
 import {TabsDemo} from './tabs/tab-group-demo';
@@ -60,6 +62,7 @@ import {TabsDemo} from './tabs/tab-group-demo';
     LiveAnnouncerDemo,
     MdCheckboxDemoNestedChecklist,
     MenuDemo,
+    SnackBarDemo,
     OverlayDemo,
     PortalDemo,
     ProgressBarDemo,
@@ -68,6 +71,7 @@ import {TabsDemo} from './tabs/tab-group-demo';
     RippleDemo,
     RotiniPanel,
     ScienceJoke,
+    SelectDemo,
     SidenavDemo,
     SliderDemo,
     SlideToggleDemo,

@@ -9,7 +9,7 @@ describe('MdSlideToggle', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MdSlideToggleModule.forRoot(), FormsModule],
-      declarations: [SlideToggleTestApp],
+      declarations: [SlideToggleTestApp, SlideToggleFormsTestApp],
     });
 
     TestBed.compileComponents();
@@ -116,11 +116,10 @@ describe('MdSlideToggle', () => {
 
       expect(slideToggleElement.classList).toContain('md-checked');
       expect(slideToggle.checked).toBe(true);
-
       expect(testComponent.onSlideClick).toHaveBeenCalledTimes(1);
     });
 
-    it('should trigger the change event properly', async(() => {
+    it('should trigger the change event properly', () => {
       expect(inputElement.checked).toBe(false);
       expect(slideToggleElement.classList).not.toContain('md-checked');
 
@@ -129,16 +128,8 @@ describe('MdSlideToggle', () => {
 
       expect(inputElement.checked).toBe(true);
       expect(slideToggleElement.classList).toContain('md-checked');
-
-      // Wait for the fixture to become stable, because the EventEmitter for the change event,
-      // will only fire after the zone async change detection has finished.
-      fixture.whenStable().then(() => {
-        // The change event shouldn't fire, because the value change was not caused
-        // by any interaction.
-        expect(testComponent.onSlideChange).toHaveBeenCalledTimes(1);
-      });
-
-    }));
+      expect(testComponent.onSlideChange).toHaveBeenCalledTimes(1);
+    });
 
     it('should not trigger the change event by changing the native value', async(() => {
       expect(inputElement.checked).toBe(false);
@@ -150,14 +141,11 @@ describe('MdSlideToggle', () => {
       expect(inputElement.checked).toBe(true);
       expect(slideToggleElement.classList).toContain('md-checked');
 
-      // Wait for the fixture to become stable, because the EventEmitter for the change event,
-      // will only fire after the zone async change detection has finished.
+      // The change event shouldn't fire because the value change was not caused
+      // by any interaction. Use whenStable to ensure an event isn't fired asynchronously.
       fixture.whenStable().then(() => {
-        // The change event shouldn't fire, because the value change was not caused
-        // by any interaction.
         expect(testComponent.onSlideChange).not.toHaveBeenCalled();
       });
-
     }));
 
     it('should not trigger the change event on initialization', async(() => {
@@ -170,13 +158,11 @@ describe('MdSlideToggle', () => {
       expect(inputElement.checked).toBe(true);
       expect(slideToggleElement.classList).toContain('md-checked');
 
-      // Wait for the fixture to become stable, because the EventEmitter for the change event,
-      // will only fire after the zone async change detection has finished.
+      // The change event shouldn't fire, because the native input element is not focused.
+      // Use whenStable to ensure an event isn't fired asynchronously.
       fixture.whenStable().then(() => {
-        // The change event shouldn't fire, because the native input element is not focused.
         expect(testComponent.onSlideChange).not.toHaveBeenCalled();
       });
-
     }));
 
     it('should add a suffix to the inputs id', () => {
@@ -332,6 +318,18 @@ describe('MdSlideToggle', () => {
       expect(slideToggleElement.classList).toContain('md-slide-toggle-focused');
     });
 
+    it('should forward the required attribute', () => {
+      testComponent.isRequired = true;
+      fixture.detectChanges();
+
+      expect(inputElement.required).toBe(true);
+
+      testComponent.isRequired = false;
+      fixture.detectChanges();
+
+      expect(inputElement.required).toBe(false);
+    });
+
   });
 
   describe('custom template', () => {
@@ -343,6 +341,55 @@ describe('MdSlideToggle', () => {
 
       expect(fixture.componentInstance.lastEvent).toBeFalsy();
     }));
+  });
+
+  describe('with forms', () => {
+
+    let fixture: ComponentFixture<any>;
+    let testComponent: SlideToggleFormsTestApp;
+    let buttonElement: HTMLButtonElement;
+    let labelElement: HTMLLabelElement;
+    let inputElement: HTMLInputElement;
+
+    // This initialization is async() because it needs to wait for ngModel to set the initial value.
+    beforeEach(async(() => {
+      fixture = TestBed.createComponent(SlideToggleFormsTestApp);
+
+      testComponent = fixture.debugElement.componentInstance;
+
+      fixture.detectChanges();
+
+      buttonElement = fixture.debugElement.query(By.css('button')).nativeElement;
+      labelElement = fixture.debugElement.query(By.css('label')).nativeElement;
+      inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
+    }));
+
+    it('should prevent the form from submit when being required', () => {
+
+      if ('reportValidity' in inputElement === false) {
+        // If the browser does not report the validity then the tests will break.
+        // e.g Safari 8 on Mobile.
+        return;
+      }
+
+      testComponent.isRequired = true;
+
+      fixture.detectChanges();
+
+      buttonElement.click();
+      fixture.detectChanges();
+
+      expect(testComponent.isSubmitted).toBe(false);
+
+      testComponent.isRequired = false;
+      fixture.detectChanges();
+
+      buttonElement.click();
+      fixture.detectChanges();
+
+      expect(testComponent.isSubmitted).toBe(true);
+    });
+
   });
 
 });
@@ -361,16 +408,25 @@ function dispatchFocusChangeEvent(eventName: string, element: HTMLElement): void
 @Component({
   selector: 'slide-toggle-test-app',
   template: `
-    <md-slide-toggle [(ngModel)]="slideModel" [disabled]="isDisabled" [color]="slideColor" 
-                     [id]="slideId" [checked]="slideChecked" [name]="slideName" 
-                     [ariaLabel]="slideLabel" [ariaLabelledby]="slideLabelledBy" 
-                     (change)="onSlideChange($event)"
+    <md-slide-toggle [(ngModel)]="slideModel" 
+                     [required]="isRequired"
+                     [disabled]="isDisabled" 
+                     [color]="slideColor" 
+                     [id]="slideId" 
+                     [checked]="slideChecked" 
+                     [name]="slideName" 
+                     [ariaLabel]="slideLabel"
+                     [ariaLabelledby]="slideLabelledBy" 
+                     (change)="onSlideChange($event)" 
                      (click)="onSlideClick($event)">
+                     
       <span>Test Slide Toggle</span>
+      
     </md-slide-toggle>`,
 })
 class SlideToggleTestApp {
   isDisabled: boolean = false;
+  isRequired: boolean = false;
   slideModel: boolean = false;
   slideChecked: boolean = false;
   slideColor: string;
@@ -384,4 +440,18 @@ class SlideToggleTestApp {
   onSlideChange(event: MdSlideToggleChange) {
     this.lastEvent = event;
   }
+}
+
+
+@Component({
+  selector: 'slide-toggle-forms-test-app',
+  template: `
+    <form (ngSubmit)="isSubmitted = true">
+      <md-slide-toggle name="slide" ngModel [required]="isRequired">Required</md-slide-toggle>
+      <button type="submit"></button>
+    </form>`
+})
+class SlideToggleFormsTestApp {
+  isSubmitted: boolean = false;
+  isRequired: boolean = false;
 }

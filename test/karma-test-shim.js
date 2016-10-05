@@ -28,7 +28,7 @@ System.config({
   baseURL: distPath
 });
 
-System.import(distPath + '@angular2-material/system-config-spec.js').then(function() {
+System.import(distPath + '@angular/material/system-config-spec.js').then(function() {
   // Load and configure the TestComponentBuilder.
   return Promise.all([
     System.import('@angular/core/testing'),
@@ -36,6 +36,8 @@ System.import(distPath + '@angular2-material/system-config-spec.js').then(functi
   ]).then(function (providers) {
     var testing = providers[0];
     var testingBrowser = providers[1];
+
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
     testing.TestBed.initTestEnvironment(
         testingBrowser.BrowserDynamicTestingModule,

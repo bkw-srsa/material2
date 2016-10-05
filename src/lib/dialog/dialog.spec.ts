@@ -1,9 +1,18 @@
-import {inject, async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {
+  inject,
+  async,
+  fakeAsync,
+  flushMicrotasks,
+  ComponentFixture,
+  TestBed,
+} from '@angular/core/testing';
+import {By} from '@angular/platform-browser';
 import {NgModule, Component, Directive, ViewChild, ViewContainerRef} from '@angular/core';
 import {MdDialog, MdDialogModule} from './dialog';
-import {OverlayContainer} from '@angular2-material/core';
+import {OverlayContainer} from '../core';
 import {MdDialogConfig} from './dialog-config';
 import {MdDialogRef} from './dialog-ref';
+import {MdDialogContainer} from './dialog-container';
 
 
 describe('MdDialog', () => {
@@ -76,8 +85,6 @@ describe('MdDialog', () => {
 
     viewContainerFixture.detectChanges();
 
-    viewContainerFixture.detectChanges();
-
     let afterCloseResult: string;
     dialogRef.afterClosed().subscribe(result => {
       afterCloseResult = result;
@@ -87,6 +94,87 @@ describe('MdDialog', () => {
 
     expect(afterCloseResult).toBe('Charmander');
     expect(overlayContainerElement.querySelector('md-dialog-container')).toBeNull();
+  });
+
+
+  it('should close a dialog via the escape key', () => {
+    let config = new MdDialogConfig();
+    config.viewContainerRef = testViewContainerRef;
+
+    dialog.open(PizzaMsg, config);
+
+    viewContainerFixture.detectChanges();
+
+    let dialogContainer: MdDialogContainer =
+        viewContainerFixture.debugElement.query(By.directive(MdDialogContainer)).componentInstance;
+
+    // Fake the user pressing the escape key by calling the handler directly.
+    dialogContainer.handleEscapeKey();
+
+    expect(overlayContainerElement.querySelector('md-dialog-container')).toBeNull();
+  });
+
+  it('should close when clicking on the overlay backdrop', () => {
+    let config = new MdDialogConfig();
+    config.viewContainerRef = testViewContainerRef;
+
+    dialog.open(PizzaMsg, config);
+
+    viewContainerFixture.detectChanges();
+
+    let backdrop = <HTMLElement> overlayContainerElement.querySelector('.md-overlay-backdrop');
+    backdrop.click();
+
+    expect(overlayContainerElement.querySelector('md-dialog-container')).toBeFalsy();
+  });
+
+  describe('focus management', () => {
+
+    // When testing focus, all of the elements must be in the DOM.
+    beforeEach(() => {
+      document.body.appendChild(overlayContainerElement);
+    });
+
+    afterEach(() => {
+      document.body.removeChild(overlayContainerElement);
+    });
+
+    it('should focus the first tabbable element of the dialog on open', fakeAsync(() => {
+      let config = new MdDialogConfig();
+      config.viewContainerRef = testViewContainerRef;
+
+      dialog.open(PizzaMsg, config);
+      viewContainerFixture.detectChanges();
+      flushMicrotasks();
+
+      expect(document.activeElement.tagName)
+          .toBe('INPUT', 'Expected first tabbable element (input) in the dialog to be focused.');
+    }));
+
+    it('should re-focus trigger element when dialog closes', fakeAsync(() => {
+      // Create a element that has focus before the dialog is opened.
+      let button = document.createElement('button');
+      button.id = 'dialog-trigger';
+      document.body.appendChild(button);
+      button.focus();
+
+      let config = new MdDialogConfig();
+      config.viewContainerRef = testViewContainerRef;
+
+      let dialogRef = dialog.open(PizzaMsg, config);
+      viewContainerFixture.detectChanges();
+      flushMicrotasks();
+
+      expect(document.activeElement.id)
+          .not.toBe('dialog-trigger', 'Expected the focus to change when dialog was opened.');
+
+      dialogRef.close();
+      viewContainerFixture.detectChanges();
+      flushMicrotasks();
+
+      expect(document.activeElement.id)
+          .toBe('dialog-trigger', 'Expected that the trigger was refocused after dialog close');
+    }));
   });
 });
 
@@ -109,7 +197,7 @@ class ComponentWithChildViewContainer {
 }
 
 /** Simple component for testing ComponentPortal. */
-@Component({template: '<p>Pizza</p>'})
+@Component({template: '<p>Pizza</p> <input> <button>Close</button>'})
 class PizzaMsg {
   constructor(public dialogRef: MdDialogRef<PizzaMsg>) { }
 }

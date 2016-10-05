@@ -17,7 +17,7 @@ import {
   OverlayConnectionPosition,
   OriginConnectionPosition,
   OVERLAY_PROVIDERS,
-} from '@angular2-material/core';
+} from '../core';
 
 export type TooltipPosition = 'before' | 'after' | 'above' | 'below';
 
@@ -60,9 +60,9 @@ export class MdTooltip {
       private _viewContainerRef: ViewContainerRef,
       private _changeDetectionRef: ChangeDetectorRef) {}
 
-  /** 
+  /**
    * Create overlay on init
-   * TODO: @internal
+   * TODO: internal
    */
   ngOnInit() {
     this._createOverlay();
