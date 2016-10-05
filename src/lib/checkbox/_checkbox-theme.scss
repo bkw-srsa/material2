@@ -5,17 +5,17 @@
   $is-dark-theme: map-get($theme, is-dark);
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
-  $background: map-get($theme, background);
 
 
   // The color of the checkbox border.
-  $checkbox-border-color: if($is-dark-theme, rgba(white, 0.7), rgba(black, 0.54)) !default;
+  $checkbox-border-color: md-color($bkw-black-50,400) !important;
+  $checkbox-border-color-checked: md-color($bkw-blue,400) !important;
 
   // The color of the checkbox's checkmark / mixedmark.
-  $checkbox-mark-color: md-color($background, background);
+  $checkbox-mark-color: md-color($bkw-blue, 400);
 
   // The color that is used as the checkbox background when it is checked.
-  $checkbox-background-color: md-color($accent, 500);
+  $checkbox-background-color: rgba(0,0,0,0);
 
   // NOTE(traviskaufman): While the spec calls for translucent blacks/whites for disabled colors,
   // this does not work well with elements layered on top of one another. To get around this we
@@ -27,6 +27,11 @@
   .md-checkbox-frame {
     border-color: $checkbox-border-color;
   }
+  md-checkbox.md-checkbox-checked > label > div > div.md-checkbox-frame {
+    border-color: $checkbox-border-color-checked;
+  }
+
+
 
   .md-checkbox-checkmark {
     fill: $checkbox-mark-color;
@@ -64,6 +69,5 @@
 
   // TODO(jelbourn): remove style for temporary ripple once the real ripple is applied.
   .md-checkbox-focused .md-ink-ripple {
-    background-color: md-color($accent, 0.26);
   }
 }
