@@ -1,11 +1,14 @@
 {
   "name": "material2",
-  "description": "Material Design components for Angular 2",
+  "description": "Material Design components for Angular 2 - BKW Style",
   "homepage": "https://github.com/angular/material2",
   "bugs": "https://github.com/angular/material2/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/angular/material2.git"
+    "url": "https://github.com/bkw-srsa/material2.git"
+  },
+  "publishConfig": {
+    "registry": "https://nexus.vc-nord.de/nexus/repository/npm-bkw/"
   },
   "scripts": {
     "build": "gulp build",
