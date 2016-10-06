@@ -9,6 +9,9 @@
     "type": "git",
     "url": "https://github.com/angular/material2.git"
   },
+  "publishConfig": {
+    "registry": "https://nexus.vc-nord.de/nexus/repository/npm-bkw/"
+  },
   "keywords": [
     "angular",
     "material",

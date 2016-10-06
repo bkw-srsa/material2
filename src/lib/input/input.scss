@@ -8,11 +8,15 @@
 }
 
 .bkw-enabled {
-  color: md-color($bkw-blue, 400) !important;
+
 }
 
 .bkw-invalid {
   color: md-color($bkw-red, 400) !important;
+}
+
+.bkw-not-focused {
+  color: md-color($bkw-black, 400) !important;
 }
 
 //END - BKW custom theme
