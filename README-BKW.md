@@ -16,7 +16,7 @@ Folgende Schritte werden lokal ausgeführt und setzen voraus dass das originale 
 4. entsprechende Dateien manuell mergen
      Potientieller Konflikt: /package.json 
 5. version aktualisieren
-     ./updateVersion.sh
+     indem man manuell im File package.json und src/package.json die Version hochzählt.
 6. git commit
 7. git push --all
 
@@ -37,8 +37,10 @@ Die originale Bibliothek steht z.B. mit der Version 2.0.0-alpha.7-3 zur verfügu
 Unsere änderungen werden später mit der Version 2.0.0-alpha.7-3-bkw-1 bereitgestellt.
 Die letzte Ziffer wird mit jedem von unseren releases inkrementiert.
 
+Weiter ist der package scope nicht mer @angular/material sondern @bkw/material
+
 	  
 # Deployment in unseren Nexus:
 
 execute:
-npm publish @angular/material
+sh deployToNexus.sh

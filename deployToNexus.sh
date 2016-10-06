@@ -3,7 +3,7 @@
 REGISTRY=https://nexus.vc-nord.de/nexus/repository/npm-bkw/
 
 
-packages=`find dist/@angular2-material -name 'package.json'`
+packages=`find dist/@angular/material -name 'package.json'`
 
 for p in ${packages}; do
   folder="${p/package.json/}"
