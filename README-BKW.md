@@ -40,7 +40,5 @@ Die letzte Ziffer wird mit jedem von unseren releases inkrementiert.
 	  
 # Deployment in unseren Nexus:
 
-Aktuell wird jeder push auf den 'bkw-develop' auf unserem nexus bereitgestellt.
-Dazu existiert der npm shortcut: 'npm run release'
-    
-Aktuell ist das deployment über 'gulp publish' nicht möglich.
+execute:
+npm publish @angular/material
