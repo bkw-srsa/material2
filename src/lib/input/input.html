@@ -68,7 +68,8 @@
           [class.md-accent]="dividerColor == 'accent'"
           [class.md-warn]="dividerColor == 'warn'"></span>
     </div>
-
-    <div *ngIf="hintLabel != ''" class="md-hint">{{hintLabel}}</div>
-    <ng-content select="md-hint"></ng-content>
+    <div class="bkw-hint" [class.bkw-hide]="!focused">
+        <div *ngIf="hintLabel != ''" class="md-hint">{{hintLabel}}</div>
+        <ng-content select="md-hint"></ng-content>
+    </div>
 </div>

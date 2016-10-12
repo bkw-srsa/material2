@@ -11,6 +11,18 @@
 
 }
 
+.bkw-hide {
+  opacity: 0 !important;
+}
+
+.bkw-hint {
+  opacity: 1;
+  -webkit-transition: opacity 0.25s ease-in-out;
+  -moz-transition: opacity 0.25s ease-in-out;
+  -ms-transition: opacity 0.25s ease-in-out;
+  -o-transition: opacity 0.25s ease-in-out;
+}
+
 .bkw-invalid {
   color: md-color($bkw-red, 400) !important;
 }
