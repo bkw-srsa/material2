@@ -1,0 +1,31 @@
+#!/usr/bin/expect
+
+set filename [lindex $argv 0]
+set pass "123qwe"
+set deployDir "/var/www/html/bkw-material/"
+set serverName "srv01599"
+set userName "mvn-deploy"
+
+
+spawn scp target/bkw-material.zip $userName@$serverName:/home/$userName/$filename
+expect {
+        password: {send "$pass\r" ; exp_continue}
+}
+
+spawn ssh -o StrictHostKeyChecking=no $userName@$serverName
+expect {
+        password: {send "$pass\r" ; exp_continue}
+}
+
+send "rm -rf $deployDir\r"
+
+send "mkdir $deployDir\r"
+
+send "mv ~/$filename $deployDir\r"
+
+send  "unzip $deployDir$filename -d $deployDir\r"
+send  "rm -rf $deployDir$filename\r"
+send  "exit\r"
+
+
+expect eof
