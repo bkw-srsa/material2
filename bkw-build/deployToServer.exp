@@ -1,13 +1,13 @@
 #!/usr/bin/expect
 
-set filename [lindex $argv 0]
+set filename "bkw-material.zip"
 set pass "123qwe"
 set deployDir "/var/www/html/bkw-material/"
 set serverName "srv01599"
 set userName "mvn-deploy"
 
 
-spawn scp target/bkw-material.zip $userName@$serverName:/home/$userName/$filename
+spawn scp target/$filename$filename $userName@$serverName:/home/$userName/$filename
 expect {
         password: {send "$pass\r" ; exp_continue}
 }
