@@ -15,13 +15,9 @@ import {
     forwardRef,
     AfterViewInit
 } from '@angular/core';
-import {
-    NG_VALUE_ACCESSOR,
-    ControlValueAccessor,
-    FormsModule,
-} from '@angular/forms';
+import {NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
-import {BooleanFieldValue, MdUniqueSelectionDispatcher} from '../core';
+import {MdUniqueSelectionDispatcher, coerceBooleanProperty} from '../core';
 
 export type ToggleType = 'checkbox' | 'radio';
 
@@ -52,6 +48,7 @@ export class MdButtonToggleChange {
   host: {
     'role': 'radiogroup',
   },
+  exportAs: 'mdButtonToggleGroup',
 })
 export class MdButtonToggleGroup implements AfterViewInit, ControlValueAccessor {
   /** The value for the button toggle group. Should match currently selected button toggle. */
@@ -69,7 +66,10 @@ export class MdButtonToggleGroup implements AfterViewInit, ControlValueAccessor 
   /** Whether the button toggle group is initialized or not. */
   private _isInitialized: boolean = false;
 
-  /** The method to be called in order to update ngModel. */
+  /**
+   * The method to be called in order to update ngModel.
+   * Now `ngModel` binding is not supported in multiple selection mode.
+   */
   private _controlValueAccessorChangeFn: (value: any) => void = (value) => {};
 
   /** onTouch function registered via registerOnTouch (ControlValueAccessor). */
@@ -101,13 +101,12 @@ export class MdButtonToggleGroup implements AfterViewInit, ControlValueAccessor 
   }
 
   @Input()
-  @BooleanFieldValue()
   get disabled(): boolean {
     return this._disabled;
   }
 
   set disabled(value) {
-    this._disabled = (value != null && value !== false) ? true : null;
+    this._disabled = coerceBooleanProperty(value);
   }
 
   @Input()
@@ -204,9 +203,10 @@ export class MdButtonToggleGroup implements AfterViewInit, ControlValueAccessor 
   }
 }
 
-/** Multiple selection button-toggle group. */
+/** Multiple selection button-toggle group. `ngModel` is not supported in this mode. */
 @Directive({
   selector: 'md-button-toggle-group[multiple]',
+  exportAs: 'mdButtonToggleGroup',
 })
 export class MdButtonToggleGroupMultiple {
   /** Disables all toggles in the group. */

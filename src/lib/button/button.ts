@@ -10,7 +10,7 @@ import {
   ModuleWithProviders,
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {BooleanFieldValue, MdRippleModule} from '../core';
+import {MdRippleModule, coerceBooleanProperty} from '../core';
 
 // TODO(jelbourn): Make the `isMouseDown` stuff done with one global listener.
 // TODO(kara): Convert attribute selectors to classes when attr maps become available
@@ -21,6 +21,7 @@ import {BooleanFieldValue, MdRippleModule} from '../core';
   selector: 'button[md-button], button[md-raised-button], button[md-icon-button], ' +
             'button[md-fab], button[md-mini-fab]',
   host: {
+    '[disabled]': 'disabled',
     '[class.md-button-focus]': '_isKeyboardFocused',
     '(mousedown)': '_setMousedown()',
     '(focus)': '_setKeyboardFocus()',
@@ -41,7 +42,16 @@ export class MdButton {
   _isMouseDown: boolean = false;
 
   /** Whether the ripple effect on click should be disabled. */
-  @Input() @BooleanFieldValue() disableRipple: boolean = false;
+  private _disableRipple: boolean = false;
+  private _disabled: boolean = false;
+
+  @Input()
+  get disableRipple() { return this._disableRipple; }
+  set disableRipple(v) { this._disableRipple = coerceBooleanProperty(v); }
+
+  @Input()
+  get disabled() { return this._disabled; }
+  set disabled(value: boolean) { this._disabled = coerceBooleanProperty(value); }
 
   constructor(private _elementRef: ElementRef, private _renderer: Renderer) { }
 
@@ -99,16 +109,17 @@ export class MdButton {
         el.hasAttribute('md-mini-fab');
   }
 
-  isRippleEnabled() {
-    return !this.disableRipple;
+  _isRippleDisabled() {
+    return this.disableRipple || this.disabled;
   }
 }
 
 @Component({
   moduleId: module.id,
   selector: 'a[md-button], a[md-raised-button], a[md-icon-button], a[md-fab], a[md-mini-fab]',
-  inputs: ['color'],
+  inputs: ['color', 'disabled', 'disableRipple'],
   host: {
+    '[attr.disabled]': 'disabled',
     '[class.md-button-focus]': '_isKeyboardFocused',
     '(mousedown)': '_setMousedown()',
     '(focus)': '_setKeyboardFocus()',
@@ -120,8 +131,6 @@ export class MdButton {
   encapsulation: ViewEncapsulation.None
 })
 export class MdAnchor extends MdButton {
-  _disabled: boolean = null;
-
   constructor(elementRef: ElementRef, renderer: Renderer) {
     super(elementRef, renderer);
   }
@@ -135,15 +144,6 @@ export class MdAnchor extends MdButton {
   /** Gets the aria-disabled value for the component, which must be a string for Dart. */
   get isAriaDisabled(): string {
     return this.disabled ? 'true' : 'false';
-  }
-
-  @HostBinding('attr.disabled')
-  @Input('disabled')
-  get disabled() { return this._disabled; }
-
-  set disabled(value: boolean) {
-    // The presence of *any* disabled value makes the component disabled, *except* for false.
-    this._disabled = (value != null && value != false) ? true : null;
   }
 
   _haltDisabledEvents(event: Event) {

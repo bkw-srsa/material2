@@ -18,17 +18,14 @@ import {
   ModuleWithProviders,
   ViewEncapsulation,
 } from '@angular/core';
-import {
-  NG_VALUE_ACCESSOR,
-  ControlValueAccessor,
-  FormsModule,
-} from '@angular/forms';
+import {NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
-import {BooleanFieldValue, MdError} from '../core';
+import {MdError, coerceBooleanProperty} from '../core';
 import {Observable} from 'rxjs/Observable';
 
 
 const noop = () => {};
+
 
 export const MD_INPUT_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -91,14 +88,13 @@ export class MdHint {
   @Input() align: 'start' | 'end' = 'start';
 }
 
-
 /**
  * Component that represents a text input. It encapsulates the <input> HTMLElement and
  * improve on its behaviour, along with styling it according to the Material Design.
  */
 @Component({
   moduleId: module.id,
-  selector: 'md-input',
+  selector: 'md-input, md-textarea',
   templateUrl: 'input.html',
   styleUrls: ['input.css'],
   providers: [MD_INPUT_CONTROL_VALUE_ACCESSOR],
@@ -119,9 +115,22 @@ export class MdInput implements ControlValueAccessor, AfterContentInit, OnChange
    */
   @Input('aria-label') ariaLabel: string;
   @Input('aria-labelledby') ariaLabelledBy: string;
-  @Input('aria-disabled') @BooleanFieldValue() ariaDisabled: boolean;
-  @Input('aria-required') @BooleanFieldValue() ariaRequired: boolean;
-  @Input('aria-invalid') @BooleanFieldValue() ariaInvalid: boolean;
+
+  private _ariaDisabled: boolean;
+  private _ariaRequired: boolean;
+  private _ariaInvalid: boolean;
+
+  @Input('aria-disabled')
+  get ariaDisabled(): boolean { return this._ariaDisabled; }
+  set ariaDisabled(value) { this._ariaDisabled = coerceBooleanProperty(value); }
+
+  @Input('aria-required')
+  get ariaRequired(): boolean { return this._ariaRequired; }
+  set ariaRequired(value) { this._ariaRequired = coerceBooleanProperty(value); }
+
+  @Input('aria-invalid')
+  get ariaInvalid(): boolean { return this._ariaInvalid; }
+  set ariaInvalid(value) { this._ariaInvalid = coerceBooleanProperty(value); }
 
   /**
    * Content directives.
@@ -142,14 +151,11 @@ export class MdInput implements ControlValueAccessor, AfterContentInit, OnChange
    */
   @Input() align: 'start' | 'end' = 'start';
   @Input() dividerColor: 'primary' | 'accent' | 'warn' = 'primary';
-  @Input() @BooleanFieldValue() floatingPlaceholder: boolean = true;
   @Input() hintLabel: string = '';
 
   @Input() autocomplete: string;
   @Input() autocorrect: string;
   @Input() autocapitalize: string;
-  @Input() @BooleanFieldValue() autofocus: boolean = false;
-  @Input() @BooleanFieldValue() disabled: boolean = false;
   @Input() id: string = `md-input-${nextUniqueId++}`;
   @Input() list: string = null;
   @Input() max: string | number = null;
@@ -157,13 +163,47 @@ export class MdInput implements ControlValueAccessor, AfterContentInit, OnChange
   @Input() min: string | number = null;
   @Input() minlength: number = null;
   @Input() placeholder: string = null;
-  @Input() @BooleanFieldValue() readonly: boolean = false;
-  @Input() @BooleanFieldValue() required: boolean = false;
-  @Input() @BooleanFieldValue() spellcheck: boolean = false;
   @Input() step: number = null;
   @Input() tabindex: number = null;
   @Input() type: string = 'text';
   @Input() name: string = null;
+
+  // textarea-specific
+  @Input() rows: number = null;
+  @Input() cols: number = null;
+  @Input() wrap: 'soft' | 'hard' = null;
+
+  private _floatingPlaceholder: boolean = true;
+  private _autofocus: boolean = false;
+  private _disabled: boolean = false;
+  private _readonly: boolean = false;
+  private _required: boolean = false;
+  private _spellcheck: boolean = false;
+
+  @Input()
+  get floatingPlaceholder(): boolean { return this._floatingPlaceholder; }
+  set floatingPlaceholder(value) { this._floatingPlaceholder = coerceBooleanProperty(value); }
+
+  @Input()
+  get autofocus(): boolean { return this._autofocus; }
+  set autofocus(value) { this._autofocus = coerceBooleanProperty(value); }
+
+  @Input()
+  get disabled(): boolean { return this._disabled; }
+  set disabled(value) { this._disabled = coerceBooleanProperty(value); }
+
+  @Input()
+  get readonly(): boolean { return this._readonly; }
+  set readonly(value) { this._readonly = coerceBooleanProperty(value); }
+
+  @Input()
+  get required(): boolean { return this._required; }
+  set required(value) { this._required = coerceBooleanProperty(value); }
+
+  @Input()
+  get spellcheck(): boolean { return this._spellcheck; }
+  set spellcheck(value) { this._spellcheck = coerceBooleanProperty(value); }
+
 
   private _blurEmitter: EventEmitter<FocusEvent> = new EventEmitter<FocusEvent>();
   private _focusEmitter: EventEmitter<FocusEvent> = new EventEmitter<FocusEvent>();
@@ -194,6 +234,15 @@ export class MdInput implements ControlValueAccessor, AfterContentInit, OnChange
 
 
   @ViewChild('input') _inputElement: ElementRef;
+
+  _elementType: 'input' | 'textarea';
+
+  constructor(elementRef: ElementRef) {
+    // Set the element type depending on normalized selector used(md-input / md-textarea)
+    this._elementType = elementRef.nativeElement.nodeName.toLowerCase() === 'md-input' ?
+        'input' :
+        'textarea';
+  }
 
   /** Set focus on input */
   focus() {

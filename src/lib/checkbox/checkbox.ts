@@ -11,8 +11,10 @@ import {
     NgModule,
     ModuleWithProviders,
 } from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {NG_VALUE_ACCESSOR, ControlValueAccessor} from '@angular/forms';
-import {BooleanFieldValue} from '../core';
+import {coerceBooleanProperty} from '../core/coersion/boolean-property';
+import {MdRippleModule} from '../core';
 
 /**
  * Monotonically increasing integer used to auto-generate unique ids for checkbox components.
@@ -88,22 +90,37 @@ export class MdCheckbox implements ControlValueAccessor {
   /** A unique id for the checkbox. If one is not supplied, it is auto-generated. */
   @Input() id: string = `md-checkbox-${++nextId}`;
 
+  /** Whether the ripple effect on click should be disabled. */
+  private _disableRipple: boolean;
+
+  @Input()
+  get disableRipple(): boolean { return this._disableRipple; }
+  set disableRipple(value) { this._disableRipple = coerceBooleanProperty(value); }
+
   /** ID to be applied to the `input` element */
   get inputId(): string {
     return `input-${this.id}`;
   }
 
+  private _required: boolean;
+
   /** Whether the checkbox is required or not. */
-  @Input() @BooleanFieldValue() required: boolean = false;
+  @Input()
+  get required(): boolean { return this._required; }
+  set required(value) { this._required = coerceBooleanProperty(value); }
 
   /** Whether or not the checkbox should come before or after the label. */
   @Input() align: 'start' | 'end' = 'start';
+
+  private _disabled: boolean;
 
   /**
    * Whether the checkbox is disabled. When the checkbox is disabled it cannot be interacted with.
    * The correct ARIA attributes are applied to denote this to assistive technology.
    */
-  @Input() disabled: boolean = false;
+  @Input()
+  get disabled(): boolean { return this._disabled; }
+  set disabled(value) { this._disabled = coerceBooleanProperty(value); }
 
   /**
    * The tabindex attribute for the checkbox. Note that when the checkbox is disabled, the attribute
@@ -128,11 +145,15 @@ export class MdCheckbox implements ControlValueAccessor {
 
   private _indeterminate: boolean = false;
 
+  private _color: string;
+
   private _controlValueAccessorChangeFn: (value: any) => void = (value) => {};
 
   hasFocus: boolean = false;
 
-  constructor(private _renderer: Renderer, private _elementRef: ElementRef) {}
+  constructor(private _renderer: Renderer, private _elementRef: ElementRef) {
+    this.color = 'accent';
+  }
 
   /**
    * Whether the checkbox is checked. Note that setting `checked` will immediately set
@@ -172,6 +193,32 @@ export class MdCheckbox implements ControlValueAccessor {
       this._transitionCheckState(
           this.checked ? TransitionCheckState.Checked : TransitionCheckState.Unchecked);
     }
+  }
+
+  /** Sets the color of the checkbox */
+  @Input()
+  get color(): string {
+    return this._color;
+  }
+
+  set color(value: string) {
+    this._updateColor(value);
+  }
+
+  _updateColor(newColor: string) {
+    this._setElementColor(this._color, false);
+    this._setElementColor(newColor, true);
+    this._color = newColor;
+  }
+
+  _setElementColor(color: string, isAdd: boolean) {
+    if (color != null && color != '') {
+      this._renderer.setElementClass(this._elementRef.nativeElement, `md-${color}`, isAdd);
+    }
+  }
+
+  _isRippleDisabled() {
+    return this.disableRipple || this.disabled;
   }
 
   /**
@@ -307,10 +354,15 @@ export class MdCheckbox implements ControlValueAccessor {
 
     return `md-checkbox-anim-${animSuffix}`;
   }
+
+  getHostElement() {
+    return this._elementRef.nativeElement;
+  }
 }
 
 
 @NgModule({
+  imports: [CommonModule, MdRippleModule],
   exports: [MdCheckbox],
   declarations: [MdCheckbox],
 })

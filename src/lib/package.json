@@ -1,6 +1,6 @@
 {
   "name": "@bkw/material",
-  "version": "2.0.0-alpha.9-bkw-4",
+  "version": "2.0.0-alpha.10-bkw",
   "description": "Angular 2 Material",
   "main": "./material.umd.js",
   "module": "./index.js",
@@ -25,7 +25,8 @@
   "homepage": "https://github.com/angular/material2#readme",
   "peerDependencies": {
     "@angular/core": "^2.0.0",
-    "@angular/common": "^2.0.0"
+    "@angular/common": "^2.0.0",
+    "@angular/http": "^2.0.0"
   },
   "dependencies": {
     "@types/hammerjs": "^2.0.30"

@@ -11,27 +11,6 @@
 
 ## Usage
 
-### Setup
-
-Import the MdMenu module.
-
-*my-app-module.ts*
-```ts
-import {MdMenuModule} from '@angular2-material/menu';
-
-@NgModule({
-  imports: [MdMenuModule.forRoot()],
-  ...
-})
-export class MyAppModule {}
-```
-
-For alpha.7, you need to include the overlay styles in your app via a `link` element. This will
-look something like
-```html
-<link href="vendor/@angular2-material/core/overlay/overlay.css" rel="stylesheet">
-```
-
 ### Simple menu
 
 In your template, create an `md-menu` element. You can use either `<button>` or `<anchor>` tags for 
@@ -104,6 +83,34 @@ class MyComp {
     <button md-menu-item disabled> Sign Out </button>
 </md-menu>
 ```
+
+### Adding an icon
+
+Menus also support displaying `md-icon` elements before the menu item text.
+
+*my-comp.html*
+```html
+<md-menu #menu="mdMenu">
+  <button md-menu-item> 
+    <md-icon> dialpad </md-icon>
+    <span> Redial </span>
+  </button>
+  <button md-menu-item disabled> 
+    <md-icon> voicemail </md-icon>
+    <span> Check voicemail </span>
+  </button>
+  <button md-menu-item> 
+    <md-icon> notifications_off </md-icon>
+    <span> Disable alerts </span>
+  </button>
+</md-menu>
+```
+
+Output:
+
+<img src="https://material.angularjs.org/material2_assets/menu/icon_menu_closed.png">
+<img src="https://material.angularjs.org/material2_assets/menu/icon_menu_open.png">
+
 
 ### Customizing menu position
 

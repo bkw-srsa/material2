@@ -153,6 +153,17 @@ describe('MdCheckbox', () => {
       expect(inputElement.disabled).toBe(false);
     });
 
+    it('should not have a ripple when disabled', () => {
+      let rippleElement = checkboxNativeElement.querySelector('[md-ripple]');
+      expect(rippleElement).toBeTruthy('Expected an enabled checkbox to have a ripple');
+
+      testComponent.isDisabled = true;
+      fixture.detectChanges();
+
+      rippleElement = checkboxNativeElement.querySelector('[md-ripple]');
+      expect(rippleElement).toBeFalsy('Expected a disabled checkbox not to have a ripple');
+    });
+
     it('should not toggle `checked` state upon interation while disabled', () => {
       testComponent.isDisabled = true;
       fixture.detectChanges();
@@ -265,6 +276,36 @@ describe('MdCheckbox', () => {
       fixture.detectChanges();
 
       expect(inputElement.required).toBe(false);
+    });
+
+    describe('color behaviour', () => {
+      it('should apply class based on color attribute', () => {
+        testComponent.checkboxColor = 'primary';
+        fixture.detectChanges();
+        expect(checkboxDebugElement.nativeElement.classList.contains('md-primary')).toBe(true);
+
+        testComponent.checkboxColor = 'accent';
+        fixture.detectChanges();
+        expect(checkboxDebugElement.nativeElement.classList.contains('md-accent')).toBe(true);
+      });
+
+      it('should should not clear previous defined classes', () => {
+        checkboxDebugElement.nativeElement.classList.add('custom-class');
+
+        testComponent.checkboxColor = 'primary';
+        fixture.detectChanges();
+
+        expect(checkboxDebugElement.nativeElement.classList.contains('md-primary')).toBe(true);
+        expect(checkboxDebugElement.nativeElement.classList.contains('custom-class')).toBe(true);
+
+        testComponent.checkboxColor = 'accent';
+        fixture.detectChanges();
+
+        expect(checkboxDebugElement.nativeElement.classList.contains('md-primary')).toBe(false);
+        expect(checkboxDebugElement.nativeElement.classList.contains('md-accent')).toBe(true);
+        expect(checkboxDebugElement.nativeElement.classList.contains('custom-class')).toBe(true);
+
+      });
     });
 
     describe('state transition css classes', () => {
@@ -453,6 +494,20 @@ describe('MdCheckbox', () => {
 
       expect(inputElement.tabIndex).toBe(13);
     });
+
+    it('should remove ripple if md-ripple-disabled input is set', async(() => {
+      testComponent.disableRipple = true;
+      fixture.detectChanges();
+
+      expect(checkboxNativeElement.querySelectorAll('[md-ripple]').length)
+        .toBe(0, 'Expect no [md-ripple] in checkbox');
+
+      testComponent.disableRipple = false;
+      fixture.detectChanges();
+
+      expect(checkboxNativeElement.querySelectorAll('[md-ripple]').length)
+        .toBe(1, 'Expect [md-ripple] in checkbox');
+    }));
   });
 
   describe('with multiple checkboxes', () => {
@@ -519,6 +574,7 @@ describe('MdCheckbox', () => {
         [checked]="isChecked" 
         [indeterminate]="isIndeterminate" 
         [disabled]="isDisabled"
+        [color]="checkboxColor"
         (change)="changeCount = changeCount + 1"
         (click)="onCheckboxClick($event)"
         (change)="onCheckboxChange($event)">
@@ -536,6 +592,7 @@ class SingleCheckbox {
   parentElementKeyedUp: boolean = false;
   lastKeydownEvent: Event = null;
   changeCount: number = 0;
+  checkboxColor: string = 'primary';
 
   onCheckboxClick(event: Event) {}
   onCheckboxChange(event: MdCheckboxChange) {}
@@ -566,12 +623,16 @@ class MultipleCheckboxes { }
 /** Simple test component with tabIndex */
 @Component({
   template: `
-    <md-checkbox [tabindex]="customTabIndex" [disabled]="isDisabled">
+    <md-checkbox 
+        [tabindex]="customTabIndex" 
+        [disabled]="isDisabled" 
+        [disableRipple]="disableRipple">
     </md-checkbox>`,
 })
 class CheckboxWithTabIndex {
   customTabIndex: number = 7;
   isDisabled: boolean = false;
+  disableRipple: boolean = false;
 }
 
 /** Simple test component with an aria-label set. */

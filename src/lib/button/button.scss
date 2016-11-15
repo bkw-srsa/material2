@@ -43,6 +43,14 @@
   border-radius: $md-icon-button-border-radius;
 
   .md-button-wrapper > * {
+    line-height: $md-icon-button-line-height;
+    vertical-align: middle;
+  }
+}
+
+// The text and icon should be vertical aligned inside a button
+[md-button], [md-raised-button] {
+  .md-button-wrapper > * {
     vertical-align: middle;
   }
 }

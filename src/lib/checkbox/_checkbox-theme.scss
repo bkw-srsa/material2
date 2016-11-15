@@ -5,6 +5,8 @@
   $is-dark-theme: map-get($theme, is-dark);
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  $background: map-get($theme, background);
 
 
   // The color of the checkbox border.
@@ -48,8 +50,16 @@
   }
 
   .md-checkbox-indeterminate, .md-checkbox-checked {
-    .md-checkbox-background {
-      background-color: $checkbox-background-color;
+    &.md-primary .md-checkbox-background {
+      background-color: md-color($primary, 500);
+    }
+
+    &.md-accent .md-checkbox-background {
+      background-color: md-color($accent, 500);
+    }
+
+    &.md-warn .md-checkbox-background {
+      background-color: md-color($warn, 500);
     }
   }
 
@@ -67,7 +77,17 @@
     }
   }
 
-  // TODO(jelbourn): remove style for temporary ripple once the real ripple is applied.
-  .md-checkbox-focused .md-ink-ripple {
+  .md-checkbox:not(.md-checkbox-disabled) {
+    &.md-primary .md-checkbox-ripple .md-ripple-foreground {
+      background-color: md-color($primary, 0.26);
+    }
+
+    &.md-accent .md-checkbox-ripple .md-ripple-foreground {
+      background-color: md-color($accent, 0.26);
+    }
+
+    &.md-warn .md-checkbox-ripple .md-ripple-foreground {
+      background-color: md-color($warn, 0.26);
+    }
   }
 }

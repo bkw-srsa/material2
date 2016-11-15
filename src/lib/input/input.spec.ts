@@ -57,6 +57,7 @@ describe('MdInput', function () {
         MdInputTextTestController,
         MdInputPasswordTestController,
         MdInputNumberTestController,
+        MdTextareaWithBindings,
       ],
     });
 
@@ -68,6 +69,15 @@ describe('MdInput', function () {
     fixture.detectChanges();
 
     expect(fixture.debugElement.query(By.css('input'))).toBeTruthy();
+  });
+
+  it('should default to flating placeholders', () => {
+    let fixture = TestBed.createComponent(MdInputBaseTestController);
+    fixture.detectChanges();
+
+    let mdInput = fixture.debugElement.query(By.directive(MdInput)).componentInstance as MdInput;
+    expect(mdInput.floatingPlaceholder)
+        .toBe(true, 'Expected MdInput to default to having floating placeholders turned on');
   });
 
   it('should not be treated as empty if type is date', () => {
@@ -602,12 +612,28 @@ describe('MdInput', function () {
 
   it('supports a name attribute', () => {
     let fixture = TestBed.createComponent(MdInputWithNameTestController);
+
+    fixture.detectChanges();
+
     const inputElement: HTMLInputElement = fixture.debugElement.query(By.css('input'))
         .nativeElement;
-    fixture.detectChanges();
 
     expect(inputElement.name).toBe('some-name');
   });
+
+  describe('md-textarea', () => {
+    it('supports the rows, cols, and wrap attributes', () => {
+      let fixture = TestBed.createComponent(MdTextareaWithBindings);
+
+      fixture.detectChanges();
+
+      const textarea: HTMLTextAreaElement = fixture.nativeElement.querySelector('textarea');
+      expect(textarea.rows).toBe(4);
+      expect(textarea.cols).toBe(8);
+      expect(textarea.wrap).toBe('hard');
+    });
+  });
+
 });
 
 @Component({template: `<md-input id="test-id"></md-input>`})
@@ -779,4 +805,12 @@ class MdInputPasswordTestController {
 @Component({template: `<md-input type="number" [placeholder]="placeholder"></md-input>`})
 class MdInputNumberTestController {
   placeholder: string = '';
+}
+
+@Component({template:
+    `<md-textarea [rows]="rows" [cols]="cols" [wrap]="wrap" placeholder="Snacks"></md-textarea>`})
+class MdTextareaWithBindings {
+  rows: number = 4;
+  cols: number = 8;
+  wrap: string = 'hard';
 }

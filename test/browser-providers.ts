@@ -35,9 +35,9 @@ const configuration: { [name: string]: ConfigurationInfo } = {
   'IE10':         { unitTest: {target: null, required: true}, e2e: {target: null, required: true}},
   'IE11':         { unitTest: {target: 'SL', required: true}, e2e: {target: null, required: true}},
   'Edge':         { unitTest: {target: 'SL', required: true}, e2e: {target: null, required: true}},
-  'Android4.1':   { unitTest: {target: 'SL', required: false}, e2e: {target: null, required: true}},
-  'Android4.2':   { unitTest: {target: 'SL', required: false}, e2e: {target: null, required: true}},
-  'Android4.3':   { unitTest: {target: 'SL', required: false}, e2e: {target: null, required: true}},
+  'Android4.1':   { unitTest: {target: null, required: false}, e2e: {target: null, required: true}},
+  'Android4.2':   { unitTest: {target: null, required: false}, e2e: {target: null, required: true}},
+  'Android4.3':   { unitTest: {target: null, required: false}, e2e: {target: null, required: true}},
   'Android4.4':   { unitTest: {target: 'SL', required: false}, e2e: {target: null, required: true}},
   'Android5':     { unitTest: {target: 'SL', required: false}, e2e: {target: null, required: true}},
   'Safari7':      { unitTest: {target: null, required: false}, e2e: {target: null, required: true}},
@@ -150,7 +150,7 @@ export const customLaunchers: { [name: string]: BrowserLauncherInfo } = {
     base: 'SauceLabs',
     browserName: 'microsoftedge',
     platform: 'Windows 10',
-    version: '20.10240'
+    version: '14'
   },
   'SL_ANDROID4.1': {
     base: 'SauceLabs',

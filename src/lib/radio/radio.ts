@@ -3,6 +3,7 @@ import {
   Component,
   ContentChildren,
   Directive,
+  ElementRef,
   EventEmitter,
   HostBinding,
   Input,
@@ -15,11 +16,13 @@ import {
   NgModule,
   ModuleWithProviders,
 } from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {
   NG_VALUE_ACCESSOR,
   ControlValueAccessor
 } from '@angular/forms';
-import {MdUniqueSelectionDispatcher} from '../core';
+import {MdRippleModule, MdUniqueSelectionDispatcher} from '../core';
+import {coerceBooleanProperty} from '../core/coersion/boolean-property';
 
 
 
@@ -78,7 +81,7 @@ export class MdRadioGroup implements AfterContentInit, ControlValueAccessor {
   private _isInitialized: boolean = false;
 
   /** The method to be called in order to update ngModel */
-  private _controlValueAccessorChangeFn: (value: any) => void = (value) => {};
+  _controlValueAccessorChangeFn: (value: any) => void = (value) => {};
 
   /** onTouch function registered via registerOnTouch (ControlValueAccessor). */
   onTouched: () => any = () => {};
@@ -124,11 +127,6 @@ export class MdRadioGroup implements AfterContentInit, ControlValueAccessor {
       this._value = newValue;
 
       this._updateSelectedRadioFromValue();
-
-      // Only fire a change event if this isn't the first time the value is ever set.
-      if (this._isInitialized) {
-        this._emitChangeEvent();
-      }
     }
   }
 
@@ -194,12 +192,13 @@ export class MdRadioGroup implements AfterContentInit, ControlValueAccessor {
   }
 
   /** Dispatch change event with current selection and group value. */
-  private _emitChangeEvent(): void {
-    let event = new MdRadioChange();
-    event.source = this._selected;
-    event.value = this._value;
-    this._controlValueAccessorChangeFn(event.value);
-    this.change.emit(event);
+  _emitChangeEvent(): void {
+    if (this._isInitialized) {
+      let event = new MdRadioChange();
+      event.source = this._selected;
+      event.value = this._value;
+      this.change.emit(event);
+    }
   }
 
   /**
@@ -264,14 +263,22 @@ export class MdRadioButton implements OnInit {
   /** Value assigned to this radio.*/
   private _value: any = null;
 
+  /** Whether the ripple effect on click should be disabled. */
+  private _disableRipple: boolean;
+
   /** The parent radio group. May or may not be present. */
   radioGroup: MdRadioGroup;
+
+  @Input()
+  get disableRipple(): boolean { return this._disableRipple; }
+  set disableRipple(value) { this._disableRipple = coerceBooleanProperty(value); }
 
   /** Event emitted when the group value changes. */
   @Output()
   change: EventEmitter<MdRadioChange> = new EventEmitter<MdRadioChange>();
 
   constructor(@Optional() radioGroup: MdRadioGroup,
+              private _elementRef: ElementRef,
               public radioDispatcher: MdUniqueSelectionDispatcher) {
     // Assertions. Ideally these should be stripped out by the compiler.
     // TODO(jelbourn): Assert that there's no name binding AND a parent radio group.
@@ -296,15 +303,19 @@ export class MdRadioButton implements OnInit {
   }
 
   set checked(newCheckedState: boolean) {
-    if (newCheckedState) {
-      // Notify all radio buttons with the same name to un-check.
-      this.radioDispatcher.notify(this.id, this.name);
-    }
-
     this._checked = newCheckedState;
 
     if (newCheckedState && this.radioGroup && this.radioGroup.value != this.value) {
       this.radioGroup.selected = this;
+    } else if (!newCheckedState && this.radioGroup && this.radioGroup.value == this.value) {
+      // When unchecking the selected radio button, update the selected radio
+      // property on the group.
+      this.radioGroup.selected = null;
+    }
+
+    if (newCheckedState) {
+      // Notify all radio buttons with the same name to un-check.
+      this.radioDispatcher.notify(this.id, this.name);
     }
   }
 
@@ -363,6 +374,10 @@ export class MdRadioButton implements OnInit {
     this.change.emit(event);
   }
 
+  _isRippleDisabled() {
+    return this.disableRipple || this.disabled;
+  }
+
   /**
    * We use a hidden native input field to handle changes to focus state via keyboard navigation,
    * with visual rendering done separately. The native element is kept in sync with the overall
@@ -404,17 +419,27 @@ export class MdRadioButton implements OnInit {
     // emit its event object to the `change` output.
     event.stopPropagation();
 
+    let groupValueChanged = this.radioGroup && this.value != this.radioGroup.value;
     this.checked = true;
     this._emitChangeEvent();
 
     if (this.radioGroup) {
+      this.radioGroup._controlValueAccessorChangeFn(this.value);
       this.radioGroup._touch();
+      if (groupValueChanged) {
+        this.radioGroup._emitChangeEvent();
+      }
     }
+  }
+
+  getHostElement() {
+    return this._elementRef.nativeElement;
   }
 }
 
 
 @NgModule({
+  imports: [CommonModule, MdRippleModule],
   exports: [MdRadioGroup, MdRadioButton],
   declarations: [MdRadioGroup, MdRadioButton],
 })

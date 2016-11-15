@@ -1,7 +1,7 @@
 import {NgModule, ApplicationRef} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {HttpModule} from '@angular/http';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DemoApp, Home} from './demo-app/demo-app';
 import {RouterModule} from '@angular/router';
 import {MaterialModule} from '@angular/material';
@@ -32,15 +32,14 @@ import {SidenavDemo} from './sidenav/sidenav-demo';
 import {SnackBarDemo} from './snack-bar/snack-bar-demo';
 import {PortalDemo, ScienceJoke} from './portal/portal-demo';
 import {MenuDemo} from './menu/menu-demo';
-import {TabsDemo} from './tabs/tab-group-demo';
-
-
+import {TabsDemo, SunnyTabContent, RainyTabContent, FoggyTabContent} from './tabs/tabs-demo';
 
 @NgModule({
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
+    ReactiveFormsModule,
     RouterModule.forRoot(DEMO_APP_ROUTES),
     MaterialModule.forRoot(),
   ],
@@ -76,9 +75,12 @@ import {TabsDemo} from './tabs/tab-group-demo';
     SliderDemo,
     SlideToggleDemo,
     SpagettiPanel,
-    TabsDemo,
     ToolbarDemo,
     TooltipDemo,
+    TabsDemo,
+    SunnyTabContent,
+    RainyTabContent,
+    FoggyTabContent,
   ],
   entryComponents: [
     DemoApp,

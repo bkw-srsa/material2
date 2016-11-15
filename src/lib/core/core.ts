@@ -4,7 +4,8 @@ import {RtlModule} from './rtl/dir';
 import {MdRippleModule} from './ripple/ripple';
 import {PortalModule} from './portal/portal-directives';
 import {OverlayModule} from './overlay/overlay-directives';
-import {A11yModule} from './a11y/index';
+import {A11yModule, A11Y_PROVIDERS} from './a11y/index';
+import {OVERLAY_PROVIDERS} from './overlay/overlay';
 
 
 // RTL
@@ -53,6 +54,9 @@ export {
 
 export {FocusTrap} from './a11y/focus-trap';
 export {InteractivityChecker} from './a11y/interactivity-checker';
+export {isFakeMousedownFromScreenReader} from './a11y/fake-mousedown';
+
+export {A11yModule} from './a11y/index';
 
 export {
   MdUniqueSelectionDispatcher,
@@ -67,14 +71,20 @@ export {applyCssTransform} from './style/apply-transform';
 // Error
 export {MdError} from './errors/error';
 
-// Annotations.
-export {BooleanFieldValue} from './annotations/field-value';
-
 // Misc
 export {ComponentType} from './overlay/generic-component-type';
 
 // Keybindings
 export * from './keyboard/keycodes';
+
+export * from './compatibility/style-compatibility';
+
+// Animation
+export * from './animation/animation';
+
+// Coersion
+export {coerceBooleanProperty} from './coersion/boolean-property';
+export {coerceNumberProperty} from './coersion/number-property';
 
 
 @NgModule({
@@ -85,7 +95,7 @@ export class MdCoreModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: MdCoreModule,
-      providers: [A11yModule.forRoot().providers],
+      providers: [A11Y_PROVIDERS, OVERLAY_PROVIDERS],
     };
   }
 }

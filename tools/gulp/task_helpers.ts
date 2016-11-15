@@ -4,7 +4,7 @@ import * as gulp from 'gulp';
 import * as gulpTs from 'gulp-typescript';
 import * as path from 'path';
 
-import {NPM_VENDOR_FILES, PROJECT_ROOT, DIST_ROOT} from './constants';
+import {NPM_VENDOR_FILES, PROJECT_ROOT, DIST_ROOT, SASS_AUTOPREFIXER_OPTIONS} from './constants';
 
 
 /** Those imports lack typings. */
@@ -14,6 +14,7 @@ const gulpRunSequence = require('run-sequence');
 const gulpSass = require('gulp-sass');
 const gulpServer = require('gulp-server-livereload');
 const gulpSourcemaps = require('gulp-sourcemaps');
+const gulpAutoprefixer = require('gulp-autoprefixer');
 const resolveBin = require('resolve-bin');
 
 
@@ -33,11 +34,11 @@ function _globify(maybeGlob: string, suffix = '**/*') {
 
 
 /** Create a TS Build Task, based on the options. */
-export function tsBuildTask(tsConfigPath: string) {
+export function tsBuildTask(tsConfigPath: string, tsConfigName = 'tsconfig.json') {
   let tsConfigDir = tsConfigPath;
-  if (fs.existsSync(path.join(tsConfigDir, 'tsconfig.json'))) {
+  if (fs.existsSync(path.join(tsConfigDir, tsConfigName))) {
     // Append tsconfig.json
-    tsConfigPath = path.join(tsConfigDir, 'tsconfig.json');
+    tsConfigPath = path.join(tsConfigDir, tsConfigName);
   } else {
     tsConfigDir = path.dirname(tsConfigDir);
   }
@@ -73,6 +74,7 @@ export function sassBuildTask(dest: string, root: string, includePaths: string[]
     return gulp.src(_globify(root, '**/*.scss'))
       .pipe(gulpSourcemaps.init())
       .pipe(gulpSass(sassOptions).on('error', gulpSass.logError))
+      .pipe(gulpAutoprefixer(SASS_AUTOPREFIXER_OPTIONS))
       .pipe(gulpSourcemaps.write('.'))
       .pipe(gulp.dest(dest));
   };
@@ -113,7 +115,7 @@ export function execTask(binPath: string, args: string[], options: ExecTaskOptio
         done();
       }
     });
-  }
+  };
 }
 
 /**
@@ -133,11 +135,13 @@ export function execNodeTask(packageName: string, executable: string | string[],
       if (err) {
         done(err);
       } else {
-        // Forward to execTask.
-        execTask(binPath, args, options)(done);
+        // Execute the node binary within a new child process using spawn.
+        // The binary needs to be `node` because on Windows the shell cannot determine the correct
+        // interpreter from the shebang.
+        execTask('node', [binPath].concat(args), options)(done);
       }
     });
-  }
+  };
 }
 
 
@@ -181,10 +185,15 @@ export function vendorTask() {
     }));
 }
 
+export type livereloadOptions = boolean | {
+  enable: boolean;
+  filter: (filename: string, callback: (isAllowed: boolean) => void) => void;
+}
 
 /** Create a task that serves the dist folder. */
-export function serverTask(liveReload: boolean = true,
+export function serverTask(liveReload: livereloadOptions = true,
                            streamCallback: (stream: NodeJS.ReadWriteStream) => void = null) {
+
   return () => {
     const stream = gulp.src('dist').pipe(gulpServer({
       livereload: liveReload,
@@ -196,7 +205,7 @@ export function serverTask(liveReload: boolean = true,
       streamCallback(stream);
     }
     return stream;
-  }
+  };
 }
 
 
@@ -207,5 +216,5 @@ export function sequenceTask(...args: any[]) {
       ...args,
       done
     );
-  }
+  };
 }

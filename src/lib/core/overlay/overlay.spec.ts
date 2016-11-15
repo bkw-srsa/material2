@@ -82,6 +82,16 @@ describe('Overlay', () => {
     expect(overlayContainerElement.textContent).toBe('');
   });
 
+  it('should set the direction', () => {
+    const state = new OverlayState();
+    state.direction = 'rtl';
+
+    overlay.create(state).attach(componentPortal);
+
+    const pane = overlayContainerElement.children[0] as HTMLElement;
+    expect(pane.getAttribute('dir')).toEqual('rtl');
+  });
+
   describe('positioning', () => {
     let state: OverlayState;
 
@@ -98,18 +108,73 @@ describe('Overlay', () => {
     });
   });
 
-  describe('backdrop', () => {
-    it('should create and destroy an overlay backdrop', () => {
-      let config = new OverlayState();
-      config.hasBackdrop = true;
+  describe('size', () => {
+    let state: OverlayState;
 
+    beforeEach(() => {
+      state = new OverlayState();
+    });
+
+    it('should apply the width set in the config', () => {
+      state.width = 500;
+
+      overlay.create(state).attach(componentPortal);
+      const pane = overlayContainerElement.children[0] as HTMLElement;
+      expect(pane.style.width).toEqual('500px');
+    });
+
+    it('should support using other units if a string width is provided', () => {
+      state.width = '200%';
+
+      overlay.create(state).attach(componentPortal);
+      const pane = overlayContainerElement.children[0] as HTMLElement;
+      expect(pane.style.width).toEqual('200%');
+    });
+
+    it('should apply the height set in the config', () => {
+      state.height = 500;
+
+      overlay.create(state).attach(componentPortal);
+      const pane = overlayContainerElement.children[0] as HTMLElement;
+      expect(pane.style.height).toEqual('500px');
+    });
+
+    it('should support using other units if a string height is provided', () => {
+      state.height = '100vh';
+
+      overlay.create(state).attach(componentPortal);
+      const pane = overlayContainerElement.children[0] as HTMLElement;
+      expect(pane.style.height).toEqual('100vh');
+    });
+
+    it('should support zero widths and heights', () => {
+      state.width = 0;
+      state.height = 0;
+
+      overlay.create(state).attach(componentPortal);
+      const pane = overlayContainerElement.children[0] as HTMLElement;
+      expect(pane.style.width).toEqual('0px');
+      expect(pane.style.height).toEqual('0px');
+    });
+
+  });
+
+  describe('backdrop', () => {
+    let config: OverlayState;
+
+    beforeEach(() => {
+      config = new OverlayState();
+      config.hasBackdrop = true;
+    });
+
+    it('should create and destroy an overlay backdrop', () => {
       let overlayRef = overlay.create(config);
       overlayRef.attach(componentPortal);
 
       viewContainerFixture.detectChanges();
       let backdrop = <HTMLElement> overlayContainerElement.querySelector('.md-overlay-backdrop');
       expect(backdrop).toBeTruthy();
-      expect(backdrop.classList).not.toContain('.md-overlay-backdrop-showing');
+      expect(backdrop.classList).not.toContain('md-overlay-backdrop-showing');
 
       let backdropClickHandler = jasmine.createSpy('backdropClickHander');
       overlayRef.backdropClick().subscribe(backdropClickHandler);
@@ -117,6 +182,27 @@ describe('Overlay', () => {
       backdrop.click();
       expect(backdropClickHandler).toHaveBeenCalled();
     });
+
+    it('should apply the default overlay backdrop class', () => {
+      let overlayRef = overlay.create(config);
+      overlayRef.attach(componentPortal);
+      viewContainerFixture.detectChanges();
+
+      let backdrop = <HTMLElement> overlayContainerElement.querySelector('.md-overlay-backdrop');
+      expect(backdrop.classList).toContain('md-overlay-dark-backdrop');
+    });
+
+    it('should apply a custom overlay backdrop class', () => {
+      config.backdropClass = 'md-overlay-transparent-backdrop';
+
+      let overlayRef = overlay.create(config);
+      overlayRef.attach(componentPortal);
+      viewContainerFixture.detectChanges();
+
+      let backdrop = <HTMLElement> overlayContainerElement.querySelector('.md-overlay-backdrop');
+      expect(backdrop.classList).toContain('md-overlay-transparent-backdrop');
+    });
+
   });
 });
 

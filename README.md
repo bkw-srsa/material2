@@ -1,5 +1,5 @@
 # Material Design for Angular 2
-[![NPM Version](https://badge.fury.io/js/%40angular2-material%2Fcore.svg)](https://www.npmjs.com/package/%2540angular2-material%2Fcore)
+[![npm version](https://badge.fury.io/js/%40angular%2Fmaterial.svg)](https://www.npmjs.com/package/%40angular%2Fmaterial)
 [![Build Status](https://travis-ci.org/angular/material2.svg?branch=master)](https://travis-ci.org/angular/material2)
 [![Gitter](https://badges.gitter.im/angular/material2.svg)](https://gitter.im/angular/material2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
@@ -28,13 +28,15 @@ and which pieces are blocked) and make a comment.
 Also see our [`Good for community contribution`](https://github.com/angular/material2/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+for+community+contribution%22) 
 label.
 
-High level items planned for September 2016:
-* Work on Angular core towards 2.0.0 final
-* Preparing for conferences (Angular Connect and ng-europe)
-* Final features for dialog
-* Initial version of snackbar.
-* Additional behaviors for menu, start design for select.
-* Finalize high-level design details for data-table.
+High level items planned for November 2016:
+* Initial version of md-select
+* Continued bug bashing
+* Initial versions of autocomplete and chips
+* AoT compile e2e app
+* Continue work on https://material.angular.io site
+* Major refactoring for md-input
+* Tabs animations
+* Expanding e2e test coverage
 
 
 #### Feature status:
@@ -60,17 +62,17 @@ High level items planned for September 2016:
 | menu             | Initial version, needs enhancements | [README][17] |   [#119][0119] |
 | tooltip          | Initial version, needs enhancements | [README][18] |              - |
 | ripples          |  Available, but needs to be applied | [README][19] |   [#108][0108] |
-| dialog           |  Started, not yet ready for release |           -  |   [#114][0114] |
-| snackbar / toast |                    Proof-of-concept |           -  |   [#115][0115] |
+| dialog           |  Started, not yet ready for release | [README][22] |   [#114][0114] |
+| snackbar / toast | Initial version, needs enhancements | [README][21] |   [#115][0115] |
 | select           |                      Design started |           -  |   [#118][0118] |
-| textarea         |                         Not started |           -  |   [#546][0546] |
-| autocomplete     |                         Not started |           -  |   [#117][0117] |
-| chips            |                         Not started |           -  |   [#120][0120] |
-| theming          | In master, not released, some bugs  | [Guide][20]  |   [#123][0123] |
+| textarea         |                             Started |           -  |   [#546][0546] |
+| autocomplete     |                      Design started |           -  |   [#117][0117] |
+| chips            |                      Design started |           -  |   [#120][0120] |
+| theming          | Initial version, needs enhancements | [Guide][20]  |              - |
 | prod build       |                         Not started |           -  |              - |
 | docs site        |   UX design and tooling in progress |           -  |              - |
 | typography       |                         Not started |           -  |   [#205][0205] |
-| layout           |                         Not started |           -  |              - |
+| layout           |      Design in-progress, prototyped |           -  |              - |
 | fab speed-dial   |                         Not started |           -  |   [#860][0860] |
 | fab toolbar      |                         Not started |           -  |              - |
 | bottom-sheet     |                         Not started |           -  |              - |
@@ -100,6 +102,8 @@ High level items planned for September 2016:
 [18]: https://github.com/angular/material2/blob/master/src/lib/tooltip/README.md
 [19]: https://github.com/angular/material2/blob/master/src/lib/core/ripple/README.md
 [20]: https://github.com/angular/material2/blob/master/docs/theming.md
+[21]: https://github.com/angular/material2/blob/master/src/lib/snack-bar/README.md
+[22]: https://github.com/angular/material2/blob/master/src/lib/dialog/README.md
 
 [0107]: https://github.com/angular/material2/issues/107
 [0119]: https://github.com/angular/material2/issues/119

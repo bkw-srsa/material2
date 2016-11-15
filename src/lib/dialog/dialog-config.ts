@@ -9,11 +9,13 @@ export type DialogRole = 'dialog' | 'alertdialog'
  * Configuration for opening a modal dialog with the MdDialog service.
  */
 export class MdDialogConfig {
-  viewContainerRef: ViewContainerRef;
+  viewContainerRef?: ViewContainerRef;
 
   /** The ARIA role of the dialog element. */
-  role: DialogRole = 'dialog';
+  role?: DialogRole = 'dialog';
 
-  // TODO(jelbourn): add configuration for size, clickOutsideToClose, lifecycle hooks,
-  // ARIA labelling.
+  /** Whether the user can use escape or clicking outside to close a modal. */
+  disableClose?: boolean = false;
+
+  // TODO(jelbourn): add configuration for size, lifecycle hooks, ARIA labelling.
 }

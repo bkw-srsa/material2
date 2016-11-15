@@ -13,7 +13,8 @@ import {MdDialogConfig} from './dialog-config';
 import {MdDialogRef} from './dialog-ref';
 import {DialogInjector} from './dialog-injector';
 import {MdDialogContainer} from './dialog-container';
-import {A11yModule} from '../core/a11y/index';
+import {A11yModule, InteractivityChecker} from '../core';
+import {extendObject} from '../core/util/object-extend';
 
 export {MdDialogConfig} from './dialog-config';
 export {MdDialogRef} from './dialog-ref';
@@ -40,7 +41,9 @@ export class MdDialog {
    * @param component Type of the component to load into the load.
    * @param config
    */
-  open<T>(component: ComponentType<T>, config: MdDialogConfig): MdDialogRef<T> {
+  open<T>(component: ComponentType<T>, config?: MdDialogConfig): MdDialogRef<T> {
+    config = _applyConfigDefaults(config);
+
     let overlayRef = this._createOverlay(config);
     let dialogContainer = this._attachDialogContainer(overlayRef, config);
 
@@ -64,7 +67,8 @@ export class MdDialog {
    * @returns A promise resolving to a ComponentRef for the attached container.
    */
   private _attachDialogContainer(overlay: OverlayRef, config: MdDialogConfig): MdDialogContainer {
-    let containerPortal = new ComponentPortal(MdDialogContainer, config.viewContainerRef);
+    let viewContainer = config ? config.viewContainerRef : null;
+    let containerPortal = new ComponentPortal(MdDialogContainer, viewContainer);
 
     let containerRef: ComponentRef<MdDialogContainer> = overlay.attach(containerPortal);
     containerRef.instance.dialogConfig = config;
@@ -87,8 +91,10 @@ export class MdDialog {
     // to modify and close it.
     let dialogRef = <MdDialogRef<T>> new MdDialogRef(overlayRef);
 
-    // When the dialog backdrop is clicked, we want to close it.
-    overlayRef.backdropClick().subscribe(() => dialogRef.close());
+    if (!dialogContainer.dialogConfig.disableClose) {
+      // When the dialog backdrop is clicked, we want to close it.
+      overlayRef.backdropClick().first().subscribe(() => dialogRef.close());
+    }
 
     // Set the dialogRef to the container so that it can use the ref to close the dialog.
     dialogContainer.dialogRef = dialogRef;
@@ -124,6 +130,15 @@ export class MdDialog {
   }
 }
 
+/**
+ * Applies default options to the dialog config.
+ * @param dialogConfig Config to be modified.
+ * @returns The new configuration object.
+ */
+function _applyConfigDefaults(dialogConfig: MdDialogConfig): MdDialogConfig {
+  return extendObject(new MdDialogConfig(), dialogConfig);
+}
+
 
 @NgModule({
   imports: [OverlayModule, PortalModule, A11yModule],
@@ -135,7 +150,7 @@ export class MdDialogModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: MdDialogModule,
-      providers: [MdDialog, OVERLAY_PROVIDERS, A11yModule.forRoot().providers],
+      providers: [MdDialog, OVERLAY_PROVIDERS, InteractivityChecker],
     };
   }
 }

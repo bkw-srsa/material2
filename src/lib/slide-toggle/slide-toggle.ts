@@ -10,16 +10,12 @@ import {
   AfterContentInit,
   NgModule,
   ModuleWithProviders,
+  ViewEncapsulation,
 } from '@angular/core';
 import {HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
-import {
-  FormsModule,
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR
-} from '@angular/forms';
-import {BooleanFieldValue, applyCssTransform} from '../core';
+import {FormsModule, ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {applyCssTransform, coerceBooleanProperty, MdGestureConfig} from '../core';
 import {Observable} from 'rxjs/Observable';
-import {MdGestureConfig} from '../core';
 
 
 export const MD_SLIDE_TOGGLE_VALUE_ACCESSOR: any = {
@@ -50,6 +46,7 @@ let nextId = 0;
   templateUrl: 'slide-toggle.html',
   styleUrls: ['slide-toggle.css'],
   providers: [MD_SLIDE_TOGGLE_VALUE_ACCESSOR],
+  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MdSlideToggle implements AfterContentInit, ControlValueAccessor {
@@ -61,17 +58,27 @@ export class MdSlideToggle implements AfterContentInit, ControlValueAccessor {
   private _uniqueId = `md-slide-toggle-${++nextId}`;
   private _checked: boolean = false;
   private _color: string;
-  _hasFocus: boolean = false;
   private _isMousedown: boolean = false;
   private _slideRenderer: SlideToggleRenderer = null;
+  private _disabled: boolean = false;
+  private _required: boolean = false;
 
-  @Input() @BooleanFieldValue() disabled: boolean = false;
-  @Input() @BooleanFieldValue() required: boolean = false;
+  // Needs to be public to support AOT compilation (as host binding).
+  _hasFocus: boolean = false;
+
   @Input() name: string = null;
   @Input() id: string = this._uniqueId;
   @Input() tabIndex: number = 0;
   @Input() ariaLabel: string = null;
   @Input() ariaLabelledby: string = null;
+
+  @Input()
+  get disabled(): boolean { return this._disabled; }
+  set disabled(value) { this._disabled = coerceBooleanProperty(value); }
+
+  @Input()
+  get required(): boolean { return this._required; }
+  set required(value) { this._required = coerceBooleanProperty(value); }
 
   private _change: EventEmitter<MdSlideToggleChange> = new EventEmitter<MdSlideToggleChange>();
   @Output() change: Observable<MdSlideToggleChange> = this._change.asObservable();
@@ -215,20 +222,29 @@ export class MdSlideToggle implements AfterContentInit, ControlValueAccessor {
 
   /** TODO: internal */
   _onDragStart() {
-    this._slideRenderer.startThumbDrag(this.checked);
+    if (!this.disabled) {
+      this._slideRenderer.startThumbDrag(this.checked);
+    }
   }
 
   /** TODO: internal */
   _onDrag(event: HammerInput) {
-    this._slideRenderer.updateThumbPosition(event.deltaX);
+    if (this._slideRenderer.isDragging()) {
+      this._slideRenderer.updateThumbPosition(event.deltaX);
+    }
   }
 
   /** TODO: internal */
   _onDragEnd() {
+    if (!this._slideRenderer.isDragging()) {
+      return;
+    }
+
     // Notice that we have to stop outside of the current event handler,
     // because otherwise the click event will be fired and will reset the new checked variable.
     setTimeout(() => {
       this.checked = this._slideRenderer.stopThumbDrag();
+      this._emitChangeEvent();
     }, 0);
   }
 
@@ -258,7 +274,7 @@ class SlideToggleRenderer {
 
   /** Initializes the drag of the slide-toggle. */
   startThumbDrag(checked: boolean) {
-    if (!this._thumbBarWidth) {
+    if (!this.isDragging()) {
       this._thumbBarWidth = this._thumbBarEl.clientWidth - this._thumbEl.clientWidth;
       this._checked = checked;
       this._thumbEl.classList.add('md-dragging');
@@ -267,7 +283,7 @@ class SlideToggleRenderer {
 
   /** Stops the current drag and returns the new checked value. */
   stopThumbDrag(): boolean {
-    if (this._thumbBarWidth) {
+    if (this.isDragging()) {
       this._thumbBarWidth = null;
       this._thumbEl.classList.remove('md-dragging');
 
@@ -279,10 +295,8 @@ class SlideToggleRenderer {
 
   /** Updates the thumb containers position from the specified distance. */
   updateThumbPosition(distance: number) {
-    if (this._thumbBarWidth) {
-      this._percentage = this._getThumbPercentage(distance);
-      applyCssTransform(this._thumbEl, `translate3d(${this._percentage}%, 0, 0)`);
-    }
+    this._percentage = this._getThumbPercentage(distance);
+    applyCssTransform(this._thumbEl, `translate3d(${this._percentage}%, 0, 0)`);
   }
 
   /** Retrieves the percentage of thumb from the moved distance. */

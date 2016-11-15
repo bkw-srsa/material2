@@ -25,17 +25,19 @@ export class MdLineSetter {
     });
   }
 
-
   private _setLineClass(count: number): void {
     this._resetClasses();
     if (count === 2 || count === 3) {
       this._setClass(`md-${count}-line`, true);
+    } else if (count > 3) {
+      this._setClass(`md-multi-line`, true);
     }
   }
 
   private _resetClasses(): void {
     this._setClass('md-2-line', false);
     this._setClass('md-3-line', false);
+    this._setClass('md-multi-line', false);
   }
 
   private _setClass(className: string, bool: boolean): void {

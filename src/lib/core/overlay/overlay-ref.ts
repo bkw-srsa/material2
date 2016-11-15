@@ -23,6 +23,8 @@ export class OverlayRef implements PortalHost {
     }
 
     let attachResult = this._portalHost.attach(portal);
+    this.updateSize();
+    this.updateDirection();
     this.updatePosition();
 
     return attachResult;
@@ -58,10 +60,28 @@ export class OverlayRef implements PortalHost {
     }
   }
 
+  /** Updates the text direction of the overlay panel. **/
+  private updateDirection() {
+    this._pane.setAttribute('dir', this._state.direction);
+  }
+
+  /** Updates the size of the overlay based on the overlay config. */
+  updateSize() {
+    if (this._state.width || this._state.width === 0) {
+      this._pane.style.width = formatCssUnit(this._state.width);
+    }
+
+    if (this._state.height || this._state.height === 0) {
+      this._pane.style.height = formatCssUnit(this._state.height);
+    }
+  }
+
   /** Attaches a backdrop for this overlay. */
   private _attachBackdrop() {
     this._backdropElement = document.createElement('div');
     this._backdropElement.classList.add('md-overlay-backdrop');
+    this._backdropElement.classList.add(this._state.backdropClass);
+
     this._pane.parentElement.appendChild(this._backdropElement);
 
     // Forward backdrop clicks such that the consumer of the overlay can perform whatever
@@ -82,6 +102,7 @@ export class OverlayRef implements PortalHost {
 
     if (backdropToDetach) {
       backdropToDetach.classList.remove('md-overlay-backdrop-showing');
+      backdropToDetach.classList.remove(this._state.backdropClass);
       backdropToDetach.addEventListener('transitionend', () => {
         backdropToDetach.parentNode.removeChild(backdropToDetach);
 
@@ -94,4 +115,8 @@ export class OverlayRef implements PortalHost {
       });
     }
   }
+}
+
+function formatCssUnit(value: number | string) {
+  return typeof value === 'string' ? value as string : `${value}px`;
 }

@@ -15,12 +15,6 @@ describe('menu', () => {
     expect(page.menu().getText()).toEqual("One\nTwo\nThree\nFour");
   });
 
-  it('should close menu when area outside menu is clicked', () => {
-    page.trigger().click();
-    page.body().click();
-    page.expectMenuPresent(false);
-  });
-
   it('should close menu when menu item is clicked', () => {
     page.trigger().click();
     page.items(0).click();
@@ -48,21 +42,23 @@ describe('menu', () => {
     expect(page.menu().getText()).toEqual("One\nTwo\nThree\nFour");
     page.expectMenuAlignedWith(page.menu(), 'trigger-two');
 
-    page.body().click();
+    page.backdrop().click();
     page.expectMenuPresent(false);
 
+    // TODO(kara): temporary, remove when #1607 is fixed
+    browser.sleep(250);
     page.trigger().click();
     expect(page.menu().getText()).toEqual("One\nTwo\nThree\nFour");
     page.expectMenuAlignedWith(page.menu(), 'trigger');
 
-    page.body().click();
+    page.backdrop().click();
     page.expectMenuPresent(false);
   });
 
   it('should mirror classes on host to menu template in overlay', () => {
     page.trigger().click();
     page.menu().getAttribute('class').then((classes) => {
-      expect(classes).toEqual('md-menu custom');
+      expect(classes).toContain('md-menu-panel custom');
     });
   });
 
@@ -73,8 +69,13 @@ describe('menu', () => {
       page.pressKey(protractor.Key.TAB);
     });
 
-    it('should auto-focus the first item when opened with keyboard', () => {
+    it('should auto-focus the first item when opened with ENTER', () => {
       page.pressKey(protractor.Key.ENTER);
+      page.expectFocusOn(page.items(0));
+    });
+
+    it('should auto-focus the first item when opened with SPACE', () => {
+      page.pressKey(protractor.Key.SPACE);
       page.expectFocusOn(page.items(0));
     });
 
@@ -111,9 +112,10 @@ describe('menu', () => {
       page.pressKey(protractor.Key.TAB);
       page.expectMenuPresent(false);
 
-      page.start().click();
       page.pressKey(protractor.Key.TAB);
       page.pressKey(protractor.Key.ENTER);
+      page.expectMenuPresent(true);
+
       page.pressKey(protractor.Key.chord(protractor.Key.SHIFT, protractor.Key.TAB));
       page.expectMenuPresent(false);
     });

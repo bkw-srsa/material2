@@ -150,8 +150,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 * All features or bug fixes **must be tested** by one or more specs (unit-tests).
 * All public API methods **must be documented**. (Details TBD).
 * We follow [Google's JavaScript Style Guide][js-style-guide], but wrap all code at
-  **100 characters**. An automated formatter is available, see
-  [DEVELOPER.md](DEVELOPER.md#clang-format).
+  **100 characters**.
 
 ## <a name="commit"></a> Commit Message Guidelines
 
@@ -234,7 +233,7 @@ changes to be accepted, the CLA must be signed. It's a quick process, we promise
 [coc]: https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md
 [commit-message-format]: https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/preview
 [corporate-cla]: http://code.google.com/legal/corporate-cla-v1.0.html
-[dev-doc]: https://github.com/angular/material2/blob/master/DEVELOPER.md
+[dev-doc]: https://github.com/angular/material2/blob/master/DEV_ENVIRONMENT.md
 [github]: https://github.com/angular/material2
 [gitter]: https://gitter.im/angular/material2
 [individual-cla]: http://code.google.com/legal/individual-cla-v1.0.html

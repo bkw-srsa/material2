@@ -4,13 +4,16 @@ import {OverlayModule, OVERLAY_PROVIDERS} from '../core';
 import {MdMenu} from './menu-directive';
 import {MdMenuItem} from './menu-item';
 import {MdMenuTrigger} from './menu-trigger';
+import {MdRippleModule} from '../core/ripple/ripple';
 export {MdMenu} from './menu-directive';
 export {MdMenuItem} from './menu-item';
 export {MdMenuTrigger} from './menu-trigger';
+export {MdMenuPanel} from './menu-panel';
+export {MenuPositionX, MenuPositionY} from './menu-positions';
 
 
 @NgModule({
-  imports: [OverlayModule, CommonModule],
+  imports: [OverlayModule, CommonModule, MdRippleModule],
   exports: [MdMenu, MdMenuItem, MdMenuTrigger],
   declarations: [MdMenu, MdMenuItem, MdMenuTrigger],
 })
