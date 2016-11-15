@@ -7,7 +7,7 @@ set serverName "srv01599"
 set userName "mvn-deploy"
 
 
-spawn scp target/$filename$filename $userName@$serverName:/home/$userName/$filename
+spawn scp target/$filename $userName@$serverName:/home/$userName/$filename
 expect {
         password: {send "$pass\r" ; exp_continue}
 }
