@@ -51,28 +51,28 @@
 
   .md-checkbox-indeterminate, .md-checkbox-checked {
     &.md-primary .md-checkbox-background {
-      background-color: md-color($primary, 500);
+	  background: none;
     }
 
     &.md-accent .md-checkbox-background {
-      background-color: md-color($accent, 500);
+	  background: none;
     }
 
     &.md-warn .md-checkbox-background {
-      background-color: md-color($warn, 500);
+	  background: none;
     }
   }
 
   .md-checkbox-disabled {
     &.md-checkbox-checked, &.md-checkbox-indeterminate {
       .md-checkbox-background {
-        background-color: $disabled-color;
+		background: none;
       }
     }
 
     &:not(.md-checkbox-checked) {
       .md-checkbox-frame {
-        border-color: $disabled-color;
+		background-color: red;
       }
     }
   }
