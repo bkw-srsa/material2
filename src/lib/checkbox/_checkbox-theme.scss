@@ -8,13 +8,14 @@
   $warn: map-get($theme, warn);
   $background: map-get($theme, background);
 
-
+  $bkw-checkbox-color-enabled: md-color($bkw-blue,500);
+  $bkw-checkbox-color-disabled: md-color($bkw-black,500);
   // The color of the checkbox border.
-  $checkbox-border-color: md-color($bkw-black-50,400) !important;
-  $checkbox-border-color-checked: md-color($bkw-blue,400) !important;
+  $checkbox-border-color: $bkw-checkbox-color-enabled!important;
+  $checkbox-border-color-checked: $bkw-checkbox-color-enabled!important;
 
   // The color of the checkbox's checkmark / mixedmark.
-  $checkbox-mark-color: md-color($bkw-blue, 400);
+  $checkbox-mark-color: md-color($bkw-blue, 500);
 
   // The color that is used as the checkbox background when it is checked.
   $checkbox-background-color: rgba(0,0,0,0);
@@ -32,17 +33,34 @@
   md-checkbox.md-checkbox-checked > label > div > div.md-checkbox-frame {
     border-color: $checkbox-border-color-checked;
   }
-
+  md-checkbox > label  {
+	color: $bkw-checkbox-color-enabled;
+  }
+  md-checkbox.md-checkbox-disabled > label > div > div.md-checkbox-frame {
+	border-color: $bkw-checkbox-color-disabled!important;
+  }
+  md-checkbox.md-checkbox-disabled > label  {
+	color: $bkw-checkbox-color-disabled!important;
+  }
+  md-checkbox.md-checkbox-disabled  .md-checkbox-checkmark {
+	fill: $checkbox-mark-color;
+  }
 
 
   .md-checkbox-checkmark {
     fill: $checkbox-mark-color;
+  }
+  md-checkbox.md-checkbox-disabled  .md-checkbox-checkmark {
+	fill: $bkw-checkbox-color-disabled!important;
   }
 
   .md-checkbox-checkmark-path {
     // !important is needed here because a stroke must be set as an attribute on the SVG in order
     // for line animation to work properly.
     stroke: $checkbox-mark-color !important;
+  }
+  md-checkbox.md-checkbox-disabled  .md-checkbox-checkmark-path {
+	stroke: $bkw-checkbox-color-disabled!important;
   }
 
   .md-checkbox-mixedmark {

@@ -42,6 +42,19 @@
     <label for="align-end">End</label>
   </div>
 </div>
+<h1>Enabled vs Disabled Checkbox</h1>
+
 
 <h1>Nested Checklist</h1>
+<md-checkbox [ngModel]="true"
+						   name="enabled"
+						   [disabled]="false">
+	Enabled <em>foobar</em> the <em>bazquux</em>?
+</md-checkbox>
+
+<md-checkbox [ngModel]="true"
+			 name="enabled"
+			 [disabled]="true">
+	Disabled <em>foobar</em> the <em>bazquux</em>?
+</md-checkbox>
 <md-checkbox-demo-nested-checklist></md-checkbox-demo-nested-checklist>
