@@ -3,9 +3,14 @@
 @import '../core/style/variables';
 
 //START - BKW custom theme
-.bkw-disabled {
-  color: md-color($bkw-green, 400) !important;
+:host{
+  // bkw additinal padding.
+  padding: 0.3rem 0.3rem;
 }
+.bkw-disabled {
+  color: md-color($bkw-black, 500) !important;
+}
+
 
 .bkw-enabled {
 
@@ -28,7 +33,7 @@
 }
 
 .bkw-not-focused {
-  color: md-color($bkw-black, 400) !important;
+  color: md-color($bkw-blue, 400) !important;
 }
 
 //END - BKW custom theme
@@ -142,8 +147,8 @@ md-input, md-textarea {
   position: absolute;
   left: 0;
   top: 0;
-
-  font-size: 100%;
+  color: md-color($bkw-black, 500);;
+  font-size: 0.8889rem;
   pointer-events: none; // We shouldn't catch mouse events (let them through).
   z-index: 1;
 
