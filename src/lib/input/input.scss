@@ -100,6 +100,7 @@ md-input, md-textarea {
 .md-input-element {
   // Font needs to be inherited, because by default <input> has a system font.
   font: inherit;
+  font-size: 1rem;
 
   // The Material input should match whatever background it is above.
   background: transparent;
