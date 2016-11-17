@@ -5,7 +5,7 @@
 @include md-core();
 
 // Define a theme.
-$primary: md-palette($bkw-blue, 400, 400, 400);
+$primary: md-palette($bkw-blue, 500, 500, 500);
 $accent: md-palette($bkw-black, A200, A100, A400);
 $warn: md-palette($bkw-red, 400, 400, 400);
 

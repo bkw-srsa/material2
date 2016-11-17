@@ -3,12 +3,12 @@
 @import '../core/style/variables';
 
 //START - BKW custom theme
-.bkw-disabled {
-  color: md-color($bkw-green, 400) !important;
+:host{
+  // bkw additinal padding.
+  padding: 0.3rem 0.3rem;
 }
-
-.bkw-enabled {
-
+.bkw-disabled {
+  color: md-color($bkw-black, 500) !important;
 }
 
 .bkw-hide {
@@ -23,12 +23,9 @@
   -o-transition: opacity 0.25s ease-in-out;
 }
 
-.bkw-invalid {
-  color: md-color($bkw-red, 400) !important;
-}
 
 .bkw-not-focused {
-  color: md-color($bkw-black, 400) !important;
+  color: md-color($bkw-blue, 400) !important;
 }
 
 //END - BKW custom theme
@@ -68,7 +65,7 @@ md-input, md-textarea {
 // cannot apply it to the host element directly.
 .md-input-wrapper {
   margin: 16px 0;
-  color: md-color($bkw-blue, 400);
+  color: md-color($bkw-blue, 500);
 }
 
 // We use a table layout to baseline align the prefix and suffix classes.
@@ -95,6 +92,7 @@ md-input, md-textarea {
 .md-input-element {
   // Font needs to be inherited, because by default <input> has a system font.
   font: inherit;
+  font-size: 1rem;
 
   // The Material input should match whatever background it is above.
   background: transparent;
@@ -142,8 +140,8 @@ md-input, md-textarea {
   position: absolute;
   left: 0;
   top: 0;
-
-  font-size: 100%;
+  color: md-color($bkw-black, 500);;
+  font-size: 0.8889rem;
   pointer-events: none; // We shouldn't catch mouse events (let them through).
   z-index: 1;
 

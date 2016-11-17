@@ -174,3 +174,30 @@
     </tr>
   </table>
 </md-card>
+
+<md-card class="demo-card demo-basic">
+	<md-toolbar color="warn">Validation</md-toolbar>
+	<md-card-content>
+		<form [formGroup]="validationForm" >
+
+			<table style="width: 100%" cellspacing="0"><tr>
+				<td>
+					<md-input formControlName="username" placeholder="Email" id="username" ngControl="username"
+							  required="true"></md-input>
+					<small
+							[hidden]="validationForm.controls.username.valid || (validationForm.controls.username.pristine)">
+						Min Lenght 5!
+					</small>
+				</td>
+			</tr>
+			<tr>
+				<td> <md-input formControlName="password" placeholder="Password" id="password" ngControl="password" required="true"
+							   type="password"></md-input>
+					<small
+							[hidden]="validationForm.controls.password.valid || (validationForm.controls.password.pristine)">
+						Required!
+					</small></td>
+			</tr></table>
+		</form>
+	</md-card-content>
+</md-card>

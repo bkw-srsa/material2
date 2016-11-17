@@ -1,7 +1,6 @@
 @import '../core/theming/palette';
 @import '../core/theming/theming';
 
-
 @mixin md-input-theme($theme) {
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
@@ -20,6 +19,25 @@
   $input-underline-color-warn: md-color($warn);
   $input-underline-disabled-color: md-color($foreground, hint-text);
   $input-underline-focused-color: md-color($primary);
+
+  md-input.ng-invalid .md-input-wrapper,
+  md-input.ng-invalid label {
+    color: md-color($bkw-red, 500) !important;
+    border-color: md-color($bkw-red, 500) !important;
+  }
+  md-input.ng-invalid .md-input-underline {
+    border-color: md-color($bkw-red, 500) !important;
+  }
+  md-input.ng-invalid .md-input-ripple {
+    background-color: md-color($bkw-red, 500) !important;
+  }
+  md-input.ng-invalid .md-focused {
+    border-color: md-color($bkw-red, 500) !important;
+
+  }
+  md-input {
+    padding-top: 0.2rem;
+  }
 
   .md-input-placeholder {
     color: $input-placeholder-color;
