@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 
 
 let max = 5;
@@ -10,6 +11,7 @@ let max = 5;
   styleUrls: ['input-demo.css'],
 })
 export class InputDemo {
+  validationForm: FormGroup;
   dividerColor: boolean;
   requiredField: boolean;
   floatingLabel: boolean;
@@ -23,9 +25,20 @@ export class InputDemo {
   ];
   rows = 8;
 
+  constructor(private fb: FormBuilder) {
+
+    this.validationForm = this.fb.group({
+            username: new FormControl({value: '', disabled: false}, Validators.minLength(5)),
+            password: new FormControl({value: '', disabled: false}, Validators.required),
+
+        }
+    );
+  }
+
   addABunch(n: number) {
     for (let x = 0; x < n; x++) {
       this.items.push({ value: ++max });
     }
   }
+
 }

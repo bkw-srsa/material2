@@ -11,11 +11,6 @@
   color: md-color($bkw-black, 500) !important;
 }
 
-
-.bkw-enabled {
-
-}
-
 .bkw-hide {
   opacity: 0 !important;
 }
@@ -28,9 +23,6 @@
   -o-transition: opacity 0.25s ease-in-out;
 }
 
-.bkw-invalid {
-  color: md-color($bkw-red, 400) !important;
-}
 
 .bkw-not-focused {
   color: md-color($bkw-blue, 400) !important;
