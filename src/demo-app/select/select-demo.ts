@@ -11,6 +11,7 @@ export class SelectDemo {
   isRequired = false;
 
   foods = [
+    {value: '', viewValue: '-'},
     {value: 'steak-0', viewValue: 'Steak'},
     {value: 'pizza-1', viewValue: 'Pizza'},
     {value: 'tacos-2', viewValue: 'Tacos'}

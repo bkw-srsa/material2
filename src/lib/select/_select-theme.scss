@@ -4,9 +4,15 @@
 @mixin md-select-theme($theme) {
   $foreground: map-get($theme, foreground);
   $background: map-get($theme, background);
-  $primary: map-get($theme, primary);
-  $warn: map-get($theme, warn);
-
+  $primary: md-color($bkw-blue, 500) ; //map-get($theme, warn);
+  $warn: md-color($bkw-red, 500) ; //map-get($theme, warn);
+  .md-select-trigger{
+    width: 100%;
+  }
+  md-select {
+    margin-bottom: 16px;
+    margin-top: 32px;
+  }
   .md-select-trigger {
     color: md-color($foreground, hint-text);
     border-bottom: 1px solid md-color($foreground, divider);

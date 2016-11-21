@@ -8,7 +8,10 @@ md-select {
   display: inline-block;
   outline: none;
 }
-
+.bkw-placeholder{
+  display: flex;
+  flex-direction: column-reverse;
+}
 .md-select-trigger {
   display: flex;
   justify-content: space-between;
@@ -19,7 +22,7 @@ md-select {
 }
 
 .md-select-placeholder {
-  padding: 0 2px;
+  padding: 0 3px;
   transform-origin: left top;
 
   [dir='rtl'] & {
@@ -45,7 +48,9 @@ md-select {
 }
 
 .md-select-panel {
-  @include md-menu-base();
+  @include md-elevation(2);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;   // for momentum scroll on mobile
   padding-top: 0;
   padding-bottom: 0;
   transform-origin: top;

@@ -54,6 +54,10 @@
   $foreground: map-get($theme, foreground);
 
   [md-button], [md-icon-button], [md-raised-button], [md-fab], [md-mini-fab] {
+    padding: 0 24px;
+  }
+
+  [md-button], [md-icon-button], [md-raised-button], [md-fab], [md-mini-fab] {
     &.md-button-focus {
       @include _md-button-focus-color($theme);
     }
