@@ -4,8 +4,8 @@
 @mixin md-select-theme($theme) {
   $foreground: map-get($theme, foreground);
   $background: map-get($theme, background);
-  $primary: md-color($bkw-blue, 500) ; //map-get($theme, warn);
-  $warn: md-color($bkw-red, 500) ; //map-get($theme, warn);
+  $primary: map-get($theme, primary);
+  $warn: map-get($theme, warn);
   .md-select-trigger{
     width: 100%;
   }
