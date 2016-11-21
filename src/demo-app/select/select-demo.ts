@@ -2,10 +2,10 @@ import {Component} from '@angular/core';
 import {FormControl} from '@angular/forms';
 
 @Component({
-    moduleId: module.id,
-    selector: 'select-demo',
-    templateUrl: 'select-demo.html',
-    styleUrls: ['select-demo.css'],
+  moduleId: module.id,
+  selector: 'select-demo',
+  templateUrl: 'select-demo.html',
+  styleUrls: ['select-demo.css'],
 })
 export class SelectDemo {
   isRequired = false;
@@ -18,5 +18,14 @@ export class SelectDemo {
   ];
 
   control = new FormControl('');
+
+  constructor() {
+    this.control.setValue('steak-0');
+  }
+
+
+  select(value: any) {
+    alert(value);
+  }
 
 }
