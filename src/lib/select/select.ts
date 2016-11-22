@@ -114,13 +114,13 @@ export class MdSelect implements AfterContentInit, ControlValueAccessor, OnDestr
     this._listenToOptions();
     // previously subscribed values
     this._selectedValues.subscribe((val)=> {
-      console.log('try to select' + val);
       this.options.forEach((option: MdOption) => {
         if (option.value === val) {
           option.select();
         }
       });
     });
+
 
     this._changeSubscription = this.options.changes.subscribe(() => {
       this._dropSubscriptions();
@@ -280,7 +280,6 @@ export class MdSelect implements AfterContentInit, ControlValueAccessor, OnDestr
 
   /** When a new option is selected, deselects the others and closes the panel. */
   private _onSelect(option: MdOption): void {
-    console.log('onSelect' + option);
     this._selected = option;
     this._updateOptions();
     this.close();

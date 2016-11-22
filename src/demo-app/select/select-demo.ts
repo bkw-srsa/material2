@@ -17,11 +17,7 @@ export class SelectDemo {
     {value: 'tacos-2', viewValue: 'Tacos'}
   ];
 
-  control = new FormControl('');
-
-  constructor() {
-    this.control.setValue('steak-0');
-  }
+  control = new FormControl('steak-0');
 
 
   select(value: any) {
