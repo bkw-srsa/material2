@@ -19,9 +19,4 @@ export class SelectDemo {
 
   control = new FormControl('steak-0');
 
-
-  select(value: any) {
-    alert(value);
-  }
-
 }
