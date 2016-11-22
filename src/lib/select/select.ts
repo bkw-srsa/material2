@@ -18,9 +18,12 @@ import {ENTER, SPACE} from '../core/keyboard/keycodes';
 import {ListKeyManager} from '../core/a11y/list-key-manager';
 import {Dir} from '../core/rtl/dir';
 import {Subscription} from 'rxjs/Subscription';
+import {ReplaySubject} from "rxjs/ReplaySubject";
+
 import {transformPlaceholder, transformPanel, fadeInContent} from './select-animations';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {coerceBooleanProperty} from '../core/coersion/boolean-property';
+
 
 @Component({
   moduleId: module.id,
@@ -82,6 +85,7 @@ export class MdSelect implements AfterContentInit, ControlValueAccessor, OnDestr
     overlayX: 'start',
     overlayY: 'top'
   }];
+  private _selectedValues: ReplaySubject<any> = new ReplaySubject<any>();
 
   @ViewChild('trigger') trigger: ElementRef;
   @ContentChildren(MdOption) options: QueryList<MdOption>;
@@ -108,6 +112,15 @@ export class MdSelect implements AfterContentInit, ControlValueAccessor, OnDestr
   ngAfterContentInit() {
     this._initKeyManager();
     this._listenToOptions();
+    // previously subscribed values
+    this._selectedValues.subscribe((val)=> {
+      this.options.forEach((option: MdOption) => {
+        if (option.value === val) {
+          option.select();
+        }
+      });
+    });
+
 
     this._changeSubscription = this.options.changes.subscribe(() => {
       this._dropSubscriptions();
@@ -142,7 +155,11 @@ export class MdSelect implements AfterContentInit, ControlValueAccessor, OnDestr
    * required to integrate with Angular's core forms API.
    */
   writeValue(value: any): void {
-    if (!this.options) { return; }
+    this._selectedValues.next(value);
+    if (!this.options) {
+      return;
+    }
+
 
     this.options.forEach((option: MdOption) => {
       if (option.value === value) {
