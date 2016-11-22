@@ -45,7 +45,8 @@
   }
 
   .md-select-value {
-    color: md-color($foreground, text);
+    // color: md-color($foreground, text);
+    color: md-color($bkw-blue, 500) !important;
   }
 
   md-option {
